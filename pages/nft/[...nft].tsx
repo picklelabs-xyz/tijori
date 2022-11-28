@@ -9,7 +9,7 @@ const NftDetail = () => {
   const router = useRouter();
   const { nft } = router.query;
 
-  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_POLY_URL}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
   const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
 
   console.log(data);

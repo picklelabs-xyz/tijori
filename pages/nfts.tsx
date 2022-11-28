@@ -11,8 +11,8 @@ const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
   const apiUrl =
-    `${process.env.NEXT_PUBLIC_BASE_URL}/getNFTs/?owner=${address}` +
-    "&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
+    `${process.env.NEXT_PUBLIC_POLY_URL}/getNFTs/?owner=${address}` +
+    "&excludeFilters[]=SPAM";
   const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
 
   useEffect(() => {
