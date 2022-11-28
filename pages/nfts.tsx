@@ -3,17 +3,24 @@ import { parseBytes32String } from "ethers/lib/utils.js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { fetcher } from "../utils/fetcher";
 import { convertIpfsUrl } from "../utils/nft";
 
 const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const baseUrl =
+    chain?.id == 1
+      ? process.env.NEXT_PUBLIC_ETH_URL
+      : process.env.NEXT_PUBLIC_POLY_URL;
   const apiUrl =
-    `${process.env.NEXT_PUBLIC_BASE_URL}/getNFTs/?owner=${address}` +
+    `${baseUrl}/getNFTs/?owner=${address}` +
     "&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
   const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
+
+  console.log(data);
 
   useEffect(() => {
     if (address) {
@@ -41,7 +48,7 @@ const NFT = () => {
                   ).toString()}`}
                 >
                   <img
-                    src={convertIpfsUrl(nft.metadata.image)}
+                    src={convertIpfsUrl(nft.media[0].gateway)}
                     alt={nft.metadata.name}
                     className="w-full object-contain aspect-square"
                   />

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
+  CpuChipIcon,
   UserCircleIcon,
   WalletIcon,
 } from "@heroicons/react/24/outline";
@@ -13,7 +14,7 @@ const Account = () => {
 
   return (
     <div>
-      <Popover className="relative text-sm">
+      <Popover className="relative">
         <Popover.Button className="inline-flex items-center">
           <UserCircleIcon className="w-6 h-6 mr-1" />
           <span> {address?.replace(address.substring(6, 37), ".....")}</span>
@@ -26,7 +27,7 @@ const Account = () => {
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Popover.Panel className="absolute z-10 mt-2 w-full text-sm rounded-md bg-white drop-shadow-lg divide-y">
+          <Popover.Panel className="absolute z-10 mt-2 w-full rounded-md bg-white drop-shadow-lg divide-y">
             <div
               className="p-4 flex items-center gap-2 cursor-pointer"
               onClick={() => disconnect()}

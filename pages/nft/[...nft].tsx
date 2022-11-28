@@ -2,14 +2,21 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
+import { useNetwork } from "wagmi";
 import { fetcher } from "../../utils/fetcher";
 
 const NftDetail = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const router = useRouter();
   const { nft } = router.query;
+  const { chain } = useNetwork();
 
-  const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
+  const baseUrl =
+    chain?.id == 1
+      ? process.env.NEXT_PUBLIC_ETH_URL
+      : process.env.NEXT_PUBLIC_POLY_URL;
+
+  const apiUrl = `${baseUrl}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
   const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
 
   console.log(data);
@@ -27,9 +34,9 @@ const NftDetail = () => {
         <div>
           <div className="flex gap-8">
             <div className="basis-1/2">
-              <img src={data.metadata.image} />
+              <img src={data.media[0].gateway} />
             </div>
-            <div className="basis-2/3">
+            <div className="basis-1/2">
               <h1 className="text-2xl font-bold">{data.title}</h1>
               <div className="my-6">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
