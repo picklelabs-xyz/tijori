@@ -13,12 +13,11 @@ import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 
+const apiKey: string = process.env.NEXT_PUBLIC_ALCHEMY_KEY ?? "demo";
+
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.polygon],
-  [
-    alchemyProvider({ apiKey: "prqWcfSyPSAAwGl5i3GW_YaHfIxxSlHw" }),
-    publicProvider(),
-  ]
+  [alchemyProvider({ apiKey: apiKey }), publicProvider()]
 );
 
 // Set up client

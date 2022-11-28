@@ -1,9 +1,11 @@
-import Image from "next/image";
+import { ethers, utils } from "ethers";
+import { parseBytes32String } from "ethers/lib/utils.js";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAccount } from "wagmi";
 import { fetcher } from "../utils/fetcher";
-import { convertIpfsUrl } from "../utils/image";
+import { convertIpfsUrl } from "../utils/nft";
 
 const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
@@ -33,12 +35,18 @@ const NFT = () => {
           data.ownedNfts.map((nft) => (
             <div className="md:basis-1/4" key={nft.id.tokenId}>
               <div className="p-6">
-                <img
-                  src={convertIpfsUrl(nft.metadata.image)}
-                  alt={nft.metadata.name}
-                  className="w-full object-contain aspect-square"
-                />
-                <div className="mt-2 text-sm">{nft.title}</div>
+                <Link
+                  href={`/nft/${nft.contract.address}/${ethers.BigNumber.from(
+                    nft.id.tokenId
+                  ).toString()}`}
+                >
+                  <img
+                    src={convertIpfsUrl(nft.metadata.image)}
+                    alt={nft.metadata.name}
+                    className="w-full object-contain aspect-square"
+                  />
+                  <div className="mt-2 text-sm">{nft.title}</div>
+                </Link>
               </div>
             </div>
           ))}
