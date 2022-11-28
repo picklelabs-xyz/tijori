@@ -44,8 +44,8 @@ const NftDetail = () => {
                 {!data.metadata.attributes && <div>No traits present.</div>}
                 {data.metadata.attributes &&
                   data.metadata.attributes
-                    .filter((item) => item.trait_type != undefined)
-                    .map((item) => (
+                    .filter((item: any) => item.trait_type != undefined)
+                    .map((item: any) => (
                       <div
                         key={item.trait_type}
                         className="rounded-md bg-indigo-200 p-4 text-center"
