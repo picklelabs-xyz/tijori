@@ -27,7 +27,7 @@ const NftDetail = () => {
         <div>
           <div className="flex gap-8">
             <div className="basis-1/2">
-              <img src={data.metadata.image} />
+              <img src={data.metadata.image} alt={data.title} />
             </div>
             <div className="basis-2/3">
               <h1 className="text-2xl font-bold">{data.title}</h1>
