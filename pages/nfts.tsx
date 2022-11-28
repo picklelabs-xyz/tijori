@@ -32,7 +32,7 @@ const NFT = () => {
 
       <div className="mt-5 flex flex-wrap -mx-6">
         {data &&
-          data.ownedNfts.map((nft) => (
+          data.ownedNfts.map((nft: any) => (
             <div className="md:basis-1/4" key={nft.id.tokenId}>
               <div className="p-6">
                 <Link
