@@ -1,12 +1,9 @@
 import { Popover, Transition } from "@headlessui/react";
-import { useState, useEffect } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
-  CpuChipIcon,
   UserCircleIcon,
-  WalletIcon,
 } from "@heroicons/react/24/outline";
+import { useAccount, useDisconnect } from "wagmi";
 
 const Account = () => {
   const { address } = useAccount();
@@ -42,37 +39,4 @@ const Account = () => {
   );
 };
 
-const Wallet = () => {
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
-  const { isConnected } = useAccount();
-  const [_isConnected, _setIsConnected] = useState(false);
-
-  useEffect(() => {
-    _setIsConnected(isConnected);
-  }, [isConnected]);
-
-  if (_isConnected) {
-    return <Account />;
-  }
-
-  return (
-    <div>
-      {!_isConnected &&
-        connectors.map((connector) => (
-          <button
-            key={connector.id}
-            onClick={() => connect({ connector })}
-            className="text-sm btn btn-blue"
-          >
-            Connect {connector.name}
-            {isLoading &&
-              connector.id === pendingConnector?.id &&
-              " (connecting)"}
-          </button>
-        ))}
-    </div>
-  );
-};
-
-export default Wallet;
+export default Account;
