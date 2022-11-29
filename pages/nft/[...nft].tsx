@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
 import { fetcher } from "../../utils/fetcher";
+import { getBaseUrl } from "../../utils/nft";
 
 const NftDetail = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
@@ -11,14 +12,9 @@ const NftDetail = () => {
   const { nft } = router.query;
   const { chain } = useNetwork();
 
-  const baseUrl =
-    chain?.id == 1
-      ? process.env.NEXT_PUBLIC_ETH_URL
-      : process.env.NEXT_PUBLIC_POLY_URL;
-
-  const apiUrl = `${baseUrl}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
-  const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
-
+  const baseUrl = getBaseUrl(chain?.id);
+  const path = `${baseUrl}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
+  const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
   console.log(data);
 
   useEffect(() => {
@@ -51,8 +47,8 @@ const NftDetail = () => {
                 {!data.metadata.attributes && <div>No traits present.</div>}
                 {data.metadata.attributes &&
                   data.metadata.attributes
-                    .filter((item) => item.trait_type != undefined)
-                    .map((item) => (
+                    .filter((item: any) => item.trait_type != undefined)
+                    .map((item: any) => (
                       <div
                         key={item.trait_type}
                         className="rounded-md bg-indigo-200 p-4 text-center"

@@ -5,12 +5,11 @@ import { WagmiConfig, createClient, configureChains, chain } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-
-const apiKey: string = process.env.NEXT_PUBLIC_ALCHEMY_KEY ?? "demo";
+import { ALCHEMY_API_KEY } from "../constants";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.polygon, chain.mainnet],
-  [alchemyProvider({ apiKey: apiKey }), publicProvider()]
+  [alchemyProvider({ apiKey: ALCHEMY_API_KEY }), publicProvider()]
 );
 
 const client = createClient({

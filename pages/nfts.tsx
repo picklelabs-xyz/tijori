@@ -5,27 +5,24 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAccount, useNetwork } from "wagmi";
 import { fetcher } from "../utils/fetcher";
-import { convertIpfsUrl } from "../utils/nft";
+import { convertIpfsUrl, getBaseUrl } from "../utils/nft";
 
 const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
-  const baseUrl =
-    chain?.id == 1
-      ? process.env.NEXT_PUBLIC_ETH_URL
-      : process.env.NEXT_PUBLIC_POLY_URL;
-  const apiUrl =
+  const baseUrl = getBaseUrl(chain?.id);
+  const path =
     `${baseUrl}/getNFTs/?owner=${address}` +
     "&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
-  const { data, error } = useSWR(shouldFetch ? apiUrl : null, fetcher);
-
+  const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
   console.log(data);
 
   useEffect(() => {
     if (address) {
       setShouldFetch(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
 
   return (
@@ -39,7 +36,7 @@ const NFT = () => {
 
       <div className="mt-5 flex flex-wrap -mx-6">
         {data &&
-          data.ownedNfts.map((nft) => (
+          data.ownedNfts.map((nft: any) => (
             <div className="md:basis-1/4" key={nft.id.tokenId}>
               <div className="p-6">
                 <Link
@@ -48,7 +45,7 @@ const NFT = () => {
                   ).toString()}`}
                 >
                   <img
-                    src={convertIpfsUrl(nft.media[0].gateway)}
+                    src={nft.media[0].gateway}
                     alt={nft.metadata.name}
                     className="w-full object-contain aspect-square"
                   />
