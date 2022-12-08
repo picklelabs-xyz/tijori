@@ -2,6 +2,7 @@ import {
   ALCHEMY_API_KEY,
   ALCHMEY_ETH_ENDPOINT,
   ALCHMEY_POLYGON_ENDPOINT,
+  ALCHMEY_POLYGON_MUM_ENDPOINT,
 } from "../constants";
 
 export const convertIpfsUrl = (url: string) => {
@@ -22,6 +23,9 @@ export const getBaseUrl = (chainId: number | undefined): string => {
       break;
     case 137:
       baseUrl = ALCHMEY_POLYGON_ENDPOINT + apiKey;
+      break;
+    case 8001:
+      baseUrl = ALCHMEY_POLYGON_MUM_ENDPOINT + apiKey;
       break;
     default:
       break;

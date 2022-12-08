@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
+import Upload from "../../components/Upload";
 import { fetcher } from "../../utils/fetcher";
 import { getBaseUrl } from "../../utils/nft";
 
@@ -36,6 +37,12 @@ const NftDetail = () => {
               <h1 className="text-2xl font-bold">{data.title}</h1>
               <div className="my-6">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
+              </div>
+              <div className="mt-4">
+                <Upload
+                  contractAddress={data.contract.address}
+                  tokenId={nft?.[1]}
+                />
               </div>
             </div>
           </div>

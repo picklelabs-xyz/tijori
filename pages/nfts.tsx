@@ -13,9 +13,10 @@ const NFT = () => {
 
   const { chain } = useNetwork();
   const baseUrl = getBaseUrl(chain?.id);
-  const path =
-    `${baseUrl}/getNFTs/?owner=${address}` +
-    "&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
+  console.log(baseUrl);
+  const path = `${baseUrl}/getNFTs/?owner=${address}`;
+  // +
+  //"&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
   const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
   console.log(data);
 

@@ -6,9 +6,10 @@ import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ALCHEMY_API_KEY } from "../constants";
+import { BundlrProvider } from "../context/bundlr";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.polygon, chain.mainnet],
+  [chain.polygon, chain.mainnet, chain.polygonMumbai],
   [alchemyProvider({ apiKey: ALCHEMY_API_KEY }), publicProvider()]
 );
 
@@ -30,9 +31,11 @@ const client = createClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <BundlrProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </BundlrProvider>
     </WagmiConfig>
   );
 }
