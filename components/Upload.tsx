@@ -1,63 +1,57 @@
 import Bundlr, { WebBundlr } from "@bundlr-network/client";
-import { ChangeEvent, useEffect, useState } from "react";
-import { toString } from "uint8arrays/to-string";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import lit, { generateAccessControlConditions } from "../utils/lit";
-import { providers, utils } from "ethers";
-import { useBundlr } from "../context/bundlr";
+import { getWebBundlr, uploadData } from "../utils/bundlr";
 
 const Upload = (contractAddress: string, tokenId: string) => {
-  const [file, setFile] = useState<string | null>(null);
-  const { bundlr, initBundlr, balance, uploadFile, fundWallet } = useBundlr();
+  const [file, setFile] = useState<File | null>(null);
+  const [fileData, setFileData] = useState<Uint8Array | null>(null);
+  const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!bundlr) {
-      initBundlr();
-    }
-    if (file && bundlr) {
-      // encrypt file content using lit, returns encrypted file content
-      // const accessControlConditions = generateAccessControlConditions(
-      //   contractAddress,
-      //   "ethereum",
-      //   tokenId
-      // );
-      // const encrypted = await lit.enryptString(
-      //   file,
-      //   "ethereum",
-      //   accessControlConditions
-      // );
-      // console.log(encrypted);
-      // const price = await bundlr.getPrice("hello".length);
-      // console.log(price.toNumber());
-      // uploadFile("hello");
-      // upload encrypted file in storage - arweave/ipfs, stores encrypted filecontent and file with nft details for encrypted contente
+    if (file && fileData && bundlr) {
+      const result = await uploadData(bundlr, file, fileData);
+      setFile(null);
+      setFileData(null);
+      console.log(result);
+      console.log("https://arweave.net/" + result.txnId);
     }
   };
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFile(file);
       const reader = new FileReader();
-      reader.readAsArrayBuffer(files[0]);
       reader.onloadend = () => {
-        const result = new Uint8Array(reader.result as ArrayBuffer);
-        setFile(toString(result));
+        if (reader.result) {
+          setFileData(Buffer.from(reader.result as ArrayBuffer));
+        }
       };
+      reader.readAsArrayBuffer(file);
     }
   };
 
+  const initBundlr = async () => {
+    const bundlr = await getWebBundlr();
+    setBundlr(bundlr);
+  };
+
+  useEffect(() => {
+    initBundlr();
+  }, []);
+
   return (
     <div>
-      <input type="file" onChange={(e) => onFileChange(e)}></input>
-      <div className="mt-2">
-        <button
-          type="button"
-          className="btn btn-blue xs"
-          onClick={(e) => handleUpload(e)}
-        >
-          Upload
-        </button>
-      </div>
+      <form onSubmit={handleUpload}>
+        <input type="file" onChange={(e) => onFileChange(e)}></input>
+        <div className="mt-2">
+          <button type="submit" className="btn btn-blue xs">
+            Upload
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

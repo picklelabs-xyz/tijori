@@ -18,10 +18,10 @@ const client = createClient({
   connectors: [
     new MetaMaskConnector({
       chains: chains,
-      // options: {
-      //   shimDisconnect: true,
-      //   UNSTABLE_shimOnConnectSelectAccount: true,
-      // },
+      options: {
+        shimDisconnect: true,
+        UNSTABLE_shimOnConnectSelectAccount: true,
+      },
     }),
   ],
   provider,

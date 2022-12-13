@@ -29,8 +29,22 @@ const BundlrProvider = ({ children }: any) => {
   }, [bundlr]);
 
   const initBundlr = async () => {
-    const provider = new providers.Web3Provider(window.ethereum as any);
-    await provider._ready();
+    // const provider = new providers.Web3Provider(window.ethereum as any);
+    // await provider._ready();
+    const result = await fetch("/api/getPresignedHash", { method: "GET" });
+    const data = await result.json();
+    const presignedHash = Buffer.from(data.presignedHash, "hex");
+
+    const provider = {
+      getSigner: () => {
+        return {
+          signMessage: () => {
+            return presignedHash;
+          },
+        };
+      },
+    };
+
     const bundlr = new WebBundlr(
       "https://devnet.bundlr.network",
       "matic",
@@ -40,6 +54,7 @@ const BundlrProvider = ({ children }: any) => {
       }
     );
     await bundlr.ready();
+    console.log("Bundlr ready:", bundlr.address);
     setBundlr(bundlr);
   };
 

@@ -28,6 +28,7 @@ export const getBaseUrl = (chainId: number | undefined): string => {
       baseUrl = ALCHMEY_POLYGON_MUM_ENDPOINT + apiKey;
       break;
     default:
+      baseUrl = ALCHMEY_POLYGON_MUM_ENDPOINT + apiKey;
       break;
   }
 
