@@ -59,6 +59,33 @@ class Lit {
       ),
     };
   }
+
+  async decryptString(
+    encryptedString: string,
+    encryptedSymmetricKey: string,
+    chain: string,
+    accessControlConditions: Array<any>
+  ) {
+    if (!this.litNodeClient) {
+      await this.connect();
+    }
+    const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain });
+    const symmetricKey = await this.litNodeClient.getEncryptionKey({
+      accessControlConditions: accessControlConditions,
+      toDecrypt: encryptedSymmetricKey,
+      chain,
+      authSig,
+    });
+    const decryptedFile = await LitJsSdk.decryptString(
+      encryptedString,
+      symmetricKey
+    );
+    // eslint-disable-next-line no-console
+    console.log({
+      decryptedFile,
+    });
+    return { decryptedFile };
+  }
 }
 
 export default new Lit();

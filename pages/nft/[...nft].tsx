@@ -38,16 +38,21 @@ const NftDetail = () => {
               <div className="my-6">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
+
               <div className="mt-4">
                 <Upload
-                  contractAddress={data.contract.address}
-                  tokenId={nft?.[1]}
+                  contractAddress={data.contract.address as string}
+                  tokenId={nft?.[1] as string}
                 />
+              </div>
+              <div className="mt-4 font-bold">Unlockable Content</div>
+              <div className="mt-1 h-52 flex items-center justify-center border border-gray-400">
+                <div>No locked content found</div>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-16 mt-16">
+          <div className="flex gap-8 mt-16">
             <div className="basis-1/2">
               <h2 className="text-lg font-bold">Traits</h2>
               <div className="flex gap-4 flex-wrap mt-3">
