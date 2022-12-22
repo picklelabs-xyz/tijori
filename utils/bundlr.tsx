@@ -1,21 +1,20 @@
 import Bundlr, { WebBundlr } from "@bundlr-network/client/";
-import { isConstructorDeclaration } from "typescript";
-import { BUNDLR_DEV } from "../constants";
+import { BUNDLR_DEV, BUNDLR_MAINNET } from "../constants";
 
 //used for api signing
 export const getServerBundlr = async (): Promise<Bundlr> => {
   const key = process.env.NEXT_PUBLIC_BUNDLR_KEY;
   const serverBundlr = new Bundlr(
-    BUNDLR_DEV.bundlrNetwork,
-    BUNDLR_DEV.currency,
-    BUNDLR_DEV.pk
+    BUNDLR_MAINNET.bundlrNetwork,
+    BUNDLR_MAINNET.currency,
+    BUNDLR_MAINNET.pk
   );
   await serverBundlr.ready();
 
   return serverBundlr;
 };
 
-//client side code
+//client side bundlr
 export const getWebBundlr = async () => {
   const result = await fetch("/api/getPresignedHash", { method: "GET" });
   const data = await result.json();
@@ -30,8 +29,8 @@ export const getWebBundlr = async () => {
     },
   };
   const bundlr = new WebBundlr(
-    BUNDLR_DEV.bundlrNetwork,
-    BUNDLR_DEV.currency,
+    BUNDLR_MAINNET.bundlrNetwork,
+    BUNDLR_MAINNET.currency,
     provider
   );
   await bundlr.ready();

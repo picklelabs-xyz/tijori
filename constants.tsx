@@ -23,3 +23,5 @@ export const BUNDLR_MAINNET = {
   providerLink: ALCHMEY_POLYGON_ENDPOINT,
   bundlrNetwork: "https://node2.bundlr.network",
 };
+
+export const ARWEAVE_GRAPH_ENDPOINT = "https://www.arweave.net/graphql";

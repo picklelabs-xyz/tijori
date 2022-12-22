@@ -6,6 +6,7 @@ import { useNetwork } from "wagmi";
 import Upload from "../../components/Upload";
 import { fetcher } from "../../utils/fetcher";
 import { getBaseUrl } from "../../utils/nft";
+import Vault from "../../components/VaultGrid/Vault";
 
 const NftDetail = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
@@ -46,9 +47,7 @@ const NftDetail = () => {
                 />
               </div>
               <div className="mt-4 font-bold">Unlockable Content</div>
-              <div className="mt-1 h-52 flex items-center justify-center border border-gray-400">
-                <div>No locked content found</div>
-              </div>
+              <Vault />
             </div>
           </div>
 

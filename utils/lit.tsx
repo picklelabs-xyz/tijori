@@ -1,8 +1,6 @@
 import * as LitJsSdk from "lit-js-sdk";
 
-const client = new LitJsSdk.LitNodeClient({
-  litNetwork: "serrano",
-});
+const client = new LitJsSdk.LitNodeClient();
 
 // access rules with owner of nft
 export const generateAccessControlConditions = (
