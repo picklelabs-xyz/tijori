@@ -1,16 +1,16 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import Upload from "./Upload";
+import UploadForm from "./Form";
 
 interface LocalModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  contractAddress: string;
-  tokenId: string;
-  chain: string;
+  contractAddress?: string;
+  tokenId?: string;
+  chain?: string;
 }
-const LockModal = ({
+const Modal = ({
   isOpen,
   setIsOpen,
   contractAddress,
@@ -63,7 +63,7 @@ const LockModal = ({
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 py-4">
-                      <Upload
+                      <UploadForm
                         contractAddress={contractAddress}
                         tokenId={tokenId}
                         chain={chain}
@@ -80,4 +80,4 @@ const LockModal = ({
   );
 };
 
-export default LockModal;
+export default Modal;

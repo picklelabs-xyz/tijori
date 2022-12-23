@@ -13,24 +13,3 @@ export const convertIpfsUrl = (url: string) => {
 
   return url;
 };
-
-export const getBaseUrl = (chainId: number | undefined): string => {
-  const apiKey = ALCHEMY_API_KEY;
-  let baseUrl = "";
-  switch (chainId) {
-    case 1:
-      baseUrl = ALCHMEY_ETH_ENDPOINT + apiKey;
-      break;
-    case 137:
-      baseUrl = ALCHMEY_POLYGON_ENDPOINT + apiKey;
-      break;
-    case 8001:
-      baseUrl = ALCHMEY_POLYGON_MUM_ENDPOINT + apiKey;
-      break;
-    default:
-      baseUrl = ALCHMEY_POLYGON_MUM_ENDPOINT + apiKey;
-      break;
-  }
-
-  return baseUrl;
-};

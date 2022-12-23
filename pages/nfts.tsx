@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAccount, useNetwork } from "wagmi";
 import { fetcher } from "../utils/fetcher";
-import { convertIpfsUrl, getBaseUrl } from "../utils/nft";
 
 const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
-
   const { chain } = useNetwork();
-  const baseUrl = getBaseUrl(chain?.id);
+  const baseUrl = chain?.rpcUrls.default;
   const path = `${baseUrl}/getNFTs/?owner=${address}`;
   // +
   //"&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";

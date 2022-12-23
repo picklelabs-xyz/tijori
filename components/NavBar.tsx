@@ -7,7 +7,7 @@ const NavBar = () => {
     <header className="border-b-2 border-b-gray-100 py-4 px-6 text-lg ">
       <div className="container m-auto flex justify-between items-center">
         <h1 className="text-xl font-bold">
-          <Link href="/">LA3 Studio</Link>
+          <Link href="/">LA3 UNLOCK</Link>
         </h1>
 
         <div className="flex text-slate-600 text-sm">

@@ -3,31 +3,33 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
-import Upload from "../../components/Upload";
 import { fetcher } from "../../utils/fetcher";
-import { getBaseUrl } from "../../utils/nft";
 import Vault from "../../components/VaultGrid/Vault";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import VaultModal from "../../components/LockModal";
-import LockModal from "../../components/LockModal";
+import Modal from "../../components/Lock/Modal";
 
 const NftDetail = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  console.log(router.query);
   const { nft } = router.query;
   const { chain } = useNetwork();
-
-  const baseUrl = getBaseUrl(chain?.id);
+  const baseUrl = chain?.rpcUrls.default;
   const path = `${baseUrl}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
   const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     if (router.isReady) {
+      //set nft details
       setShouldFetch(true);
     }
   }, [router.isReady]);
+
+  if (!chain) {
+    return <div>Please connect wallet</div>;
+  }
 
   return (
     <>
@@ -55,7 +57,13 @@ const NftDetail = () => {
                 </button>
               </div>
               <Vault />
-              <LockModal isOpen={isOpen} setIsOpen={setIsOpen} />
+              <Modal
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                contractAddress={nft?.[0]}
+                tokenId={nft?.[1]}
+                chain={chain?.name}
+              />
             </div>
           </div>
 

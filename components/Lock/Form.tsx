@@ -1,9 +1,7 @@
-import Bundlr, { WebBundlr } from "@bundlr-network/client";
+import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import lit, { generateAccessControlConditions } from "../utils/lit";
-import { getWebBundlr, uploadData, uploadMetadata } from "../utils/bundlr";
-import { ContractMethodNoResultError } from "wagmi";
-import { blob } from "stream/consumers";
+import lit, { generateAccessControlConditions } from "../../utils/lit";
+import { getWebBundlr, uploadData, uploadMetadata } from "../../utils/bundlr";
 
 interface Props {
   chain: string;
@@ -11,7 +9,7 @@ interface Props {
   tokenId: string;
 }
 
-const Upload = ({ chain, contractAddress, tokenId }: Props) => {
+const Form = ({ chain, contractAddress, tokenId }: Props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -128,4 +126,4 @@ const Upload = ({ chain, contractAddress, tokenId }: Props) => {
   );
 };
 
-export default Upload;
+export default Form;
