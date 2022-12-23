@@ -7,9 +7,13 @@ import Upload from "../../components/Upload";
 import { fetcher } from "../../utils/fetcher";
 import { getBaseUrl } from "../../utils/nft";
 import Vault from "../../components/VaultGrid/Vault";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import VaultModal from "../../components/LockModal";
+import LockModal from "../../components/LockModal";
 
 const NftDetail = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { nft } = router.query;
   const { chain } = useNetwork();
@@ -40,14 +44,18 @@ const NftDetail = () => {
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
 
-              <div className="mt-4">
-                <Upload
-                  contractAddress={data.contract.address as string}
-                  tokenId={nft?.[1] as string}
-                />
+              <div className="flex justify-between mt-4 items-center">
+                <div className="font-bold text-lg">Vault</div>
+                <button
+                  className="btn btn-blue text-sm flex items-center"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <PlusIcon className="w-4 h-4 mr-2 inline-block" />
+                  <span>Add Item</span>
+                </button>
               </div>
-              <div className="mt-4 font-bold">Unlockable Content</div>
               <Vault />
+              <LockModal isOpen={isOpen} setIsOpen={setIsOpen} />
             </div>
           </div>
 

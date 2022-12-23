@@ -6,11 +6,14 @@ import { ContractMethodNoResultError } from "wagmi";
 import { blob } from "stream/consumers";
 
 interface Props {
+  chain: string;
   contractAddress: string;
   tokenId: string;
 }
 
-const Upload = ({ contractAddress, tokenId }: Props) => {
+const Upload = ({ chain, contractAddress, tokenId }: Props) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileData, setFileData] = useState<Uint8Array | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
@@ -25,7 +28,8 @@ const Upload = ({ contractAddress, tokenId }: Props) => {
 
   const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const chain = "polygon";
+    //TODO: check for errors, form validation
+
     if (file && fileData && bundlr) {
       //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
@@ -88,16 +92,34 @@ const Upload = ({ contractAddress, tokenId }: Props) => {
 
   return (
     <div className="">
-      <div className="font-bold">Add Content</div>
-      <form
-        onSubmit={handleUpload}
-        className="flex justify-between mt-2 border border-gray-400 p-2 items-center"
-      >
-        <input
-          type="file"
-          onChange={(e) => onFileChange(e)}
-          ref={fileRef}
-        ></input>
+      <form onSubmit={handleUpload} className="grid grid-cols-1 gap-6">
+        <div>
+          <label className="text-gray-700">Upload File</label>
+          <input
+            type="file"
+            onChange={(e) => onFileChange(e)}
+            className="w-full mt-1 form-input bg-gray-50  border-gray-200 focus:ring-0 focus:border-blue-100"
+            ref={fileRef}
+          />
+        </div>
+        <div>
+          <label className="text-gray-700">Name</label>
+          <input
+            type="text"
+            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="text-gray-700">Description</label>
+          <textarea
+            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          ></textarea>
+        </div>
+
         <button type="submit" className="btn btn-blue xs">
           Upload
         </button>

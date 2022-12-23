@@ -13,7 +13,6 @@ const NFT = () => {
 
   const { chain } = useNetwork();
   const baseUrl = getBaseUrl(chain?.id);
-  console.log(baseUrl);
   const path = `${baseUrl}/getNFTs/?owner=${address}`;
   // +
   //"&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
