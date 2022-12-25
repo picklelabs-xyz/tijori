@@ -4,10 +4,19 @@ import { PhotoIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import VaultItem from "../../types/VaultItem";
 import ItemRow from "./ItemRow";
 
-const Vault = () => {
-  const [data, setData] = useState<null | []>(null);
+interface VaultProps {
+  contractAddress: string;
+  tokenId: string;
+  chain: string;
+}
+const Vault = ({ contractAddress, tokenId, chain }: VaultProps) => {
+  const [data, setData] = useState<null | VaultItem[]>(null);
+  const getData = async () => {
+    const resp = await getTransactions(contractAddress, tokenId);
+    setData(resp);
+  };
   useEffect(() => {
-    getTransactions("0x55a8dbe6f191b370885d01e30cb7d36d0fa99f16", "12143");
+    getData();
   }, []);
 
   return (

@@ -1,11 +1,50 @@
 import { LockOpenIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import VaultItem from "../../types/VaultItem";
+import axios from "axios";
+import lit, { generateAccessControlConditions } from "../../utils/lit";
+import { useState } from "react";
 
 //TODO: check if we can do typechecking basis other key value pa
 const ItemRow = (params: { isHeader?: boolean; data?: VaultItem }) => {
   const { isHeader = false, data } = params;
-  const unlockItem = () => {
-    return;
+  const [img, setImg] = useState(null);
+  const unlockItem = async () => {
+    const response = await axios.get(
+      `https://www.arweave.net/${data?.arweaveTxnId}`
+    );
+    const content = response.data;
+    const contractAddress = "0x55a8dbe6f191b370885d01e30cb7d36d0fa99f16";
+    const chain = "polygon";
+    const tokenId = "12144";
+    const acessControlConditions = generateAccessControlConditions(
+      contractAddress,
+      chain,
+      tokenId
+    );
+
+    const abc = new Blob([Buffer.from(content, "hex")]);
+
+    const final = await lit.decryptString(
+      abc,
+      data?.encryptedKey,
+      chain,
+      acessControlConditions
+    );
+
+    const decyptedFileBuffer = Buffer.from(final.decryptedFile, "hex");
+    const file = new File([decyptedFileBuffer], "unlocked file ", {
+      type: "image/png",
+    });
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = (e) => {
+      const url = fileReader.result;
+      setImg(url);
+      // console.log();
+    };
+    console.log(file);
+    // var url = URL.createObjectURL(blob);
+    // console.log(url);
   };
 
   return (
@@ -28,9 +67,12 @@ const ItemRow = (params: { isHeader?: boolean; data?: VaultItem }) => {
         ) : (
           <LockOpenIcon
             className="w-5 h-5 text-purple-500 cursor-pointer"
-            onClick={() => unlockItem}
+            onClick={() => unlockItem()}
           />
         )}
+      </div>
+      <div>
+        <img src={img} alt="preview" />
       </div>
     </div>
   );

@@ -1,20 +1,16 @@
-import Bundlr, { WebBundlr } from "@bundlr-network/client/";
-import { BUNDLR_DEV, BUNDLR_MAINNET } from "../constants";
+import { WebBundlr } from "@bundlr-network/client/";
+import { Metadata } from "../components/Lock/Form";
+import { BUNDLR_MAINNET } from "../constants";
 
-//used for api signing
-export const getServerBundlr = async (): Promise<Bundlr> => {
-  const key = process.env.NEXT_PUBLIC_BUNDLR_KEY;
-  const serverBundlr = new Bundlr(
-    BUNDLR_MAINNET.bundlrNetwork,
-    BUNDLR_MAINNET.currency,
-    BUNDLR_MAINNET.pk
-  );
-  await serverBundlr.ready();
+interface Tag {
+  name: string;
+  value: any;
+}
+interface UploadResponse {
+  status: boolean;
+  txnId?: string;
+}
 
-  return serverBundlr;
-};
-
-//client side bundlr
 export const getWebBundlr = async () => {
   const result = await fetch("/api/getPresignedHash", { method: "GET" });
   const data = await result.json();
@@ -38,35 +34,48 @@ export const getWebBundlr = async () => {
   return bundlr;
 };
 
+// Default app tags for all type of uploads
+const defaultTags: Tag[] = [
+  { name: "App-Name", value: "la3-unlock" },
+  { name: "App-version", value: "1.0-alpha" },
+];
+
+// Function to upload encrypted data
 export const uploadData = async (
   bundlr: WebBundlr,
-  file: File,
-  fileData: Uint8Array
+  encryptedData: string,
+  file?: File
 ): Promise<{ status: boolean; txnId?: string }> => {
-  const tags = [
-    { name: "Content-Type", value: file.type },
-    { name: "File", value: file.name },
-    { name: "App-Name", value: "la3-unlock" },
-    { name: "App-version", value: "1.0" },
-  ];
+  let tags = defaultTags.concat([
+    { name: "Content-Type", value: "application/octet-stream" },
+  ]);
 
-  return await upload(bundlr, fileData, tags);
+  if (file) {
+    tags = [{ name: "mime", value: file.type }, ...tags];
+  }
+
+  return await upload(bundlr, encryptedData, tags);
 };
 
+// Function to upload unlock metadata
 export const uploadMetadata = async (
   bundlr: WebBundlr,
-  metadata: object | any
+  metadata: Metadata
 ): Promise<{ status: boolean; txnId?: string }> => {
-  const tags = [
+  let tags = defaultTags.concat([
     { name: "Content-Type", value: "application/json" },
-    { name: "App-Name", value: "la3-unlock" },
-    { name: "App-version", value: "1.0" },
-    { name: "ContractAddress", value: metadata.contract_address },
+    { name: "Name", value: metadata.name },
+    { name: "ContractAddress", value: metadata.contractAddress },
     { name: "Chain", value: metadata.chain },
-    { name: "TokenId", value: metadata.token_id },
-    { name: "EncryptedKey", value: metadata.key },
-    { name: "ArweaveTxnId", value: metadata.txn_id },
-  ];
+    { name: "TokenId", value: metadata.tokenId },
+    { name: "EncryptedKey", value: metadata.encryptedKey },
+    { name: "ArweaveTxnId", value: metadata.arweaveTxnId },
+    { name: "CreatedAt", value: metadata.createdAt },
+  ]);
+
+  if (metadata.description) {
+    tags = [{ name: "Description", value: metadata.description }, ...tags];
+  }
 
   const resp = await upload(bundlr, JSON.stringify(metadata), tags);
   return resp;
@@ -74,9 +83,9 @@ export const uploadMetadata = async (
 
 const upload = async (
   bundlr: WebBundlr,
-  data: string | Uint8Array,
-  tags: any
-) => {
+  data: string,
+  tags?: Tag[]
+): Promise<UploadResponse> => {
   const txn = bundlr.createTransaction(data, { tags });
   const signatureData = await txn.getSignatureData();
   try {

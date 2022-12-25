@@ -59,7 +59,7 @@ class Lit {
   }
 
   async decryptString(
-    encryptedString: string,
+    encryptedString: Blob | File,
     encryptedSymmetricKey: string,
     chain: string,
     accessControlConditions: Array<any>
@@ -74,6 +74,7 @@ class Lit {
       chain,
       authSig,
     });
+    console.log(symmetricKey);
     const decryptedFile = await LitJsSdk.decryptString(
       encryptedString,
       symmetricKey

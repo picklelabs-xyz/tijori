@@ -6,9 +6,9 @@ import UploadForm from "./Form";
 interface LocalModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  contractAddress?: string;
-  tokenId?: string;
-  chain?: string;
+  contractAddress: string;
+  tokenId: string;
+  chain: string;
 }
 const Modal = ({
   isOpen,
@@ -62,13 +62,13 @@ const Modal = ({
                     ></XMarkIcon>
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 py-4">
+                    <div className="text-sm text-gray-500 py-4">
                       <UploadForm
                         contractAddress={contractAddress}
                         tokenId={tokenId}
-                        chain={chain}
+                        chain={chain.toLowerCase()}
                       />
-                    </p>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

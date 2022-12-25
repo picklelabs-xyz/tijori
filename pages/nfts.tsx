@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAccount, useNetwork } from "wagmi";
+import useIsMounted from "../hooks/useIsMounted";
 import { fetcher } from "../utils/fetcher";
 
 const NFT = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
+  const isMounted = useIsMounted();
   const { chain } = useNetwork();
   const baseUrl = chain?.rpcUrls.default;
   const path = `${baseUrl}/getNFTs/?owner=${address}`;
@@ -18,11 +20,13 @@ const NFT = () => {
   console.log(data);
 
   useEffect(() => {
-    if (address) {
+    if (isConnected && chain) {
       setShouldFetch(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnected]);
+  }, [isConnected, chain]);
+
+  if (!isMounted) return null;
 
   return (
     <div>

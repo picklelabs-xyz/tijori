@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Bundlr from "@bundlr-network/client/";
-import { getServerBundlr } from "../../utils/bundlr";
+import { getServerBundlr } from "./getPresignedHash";
 
 const signData = async (req: NextApiRequest, res: NextApiResponse) => {
   const serverBundlr = await getServerBundlr();

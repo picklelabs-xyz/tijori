@@ -3,13 +3,30 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import lit, { generateAccessControlConditions } from "../../utils/lit";
 import { getWebBundlr, uploadData, uploadMetadata } from "../../utils/bundlr";
 
-interface Props {
+interface FormProps {
   chain: string;
   contractAddress: string;
   tokenId: string;
 }
+export interface Metadata {
+  name: string;
+  description?: string;
+  fileMime: string;
+  fileSize: number;
+  contractAddress: string;
+  tokenId: string;
+  chain: string;
+  encryptedKey: string;
+  arweaveTxnId: string;
+  createdAt: number;
+}
 
-const Form = ({ chain, contractAddress, tokenId }: Props) => {
+/** TODO:
+ * 1. Upload button animation
+ * 2. Form validation errors and improve form inputs informations like upload size and supported file types
+ * 3. Ability to switch between upload file and text box for voucher type information
+ * **/
+const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -26,8 +43,6 @@ const Form = ({ chain, contractAddress, tokenId }: Props) => {
 
   const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //TODO: check for errors, form validation
-
     if (file && fileData && bundlr) {
       //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
@@ -44,23 +59,34 @@ const Form = ({ chain, contractAddress, tokenId }: Props) => {
         acessControlConditions
       );
 
-      const encryptedData = await encryptedFile.arrayBuffer();
+      const encryptedData = Buffer.from(
+        await encryptedFile.arrayBuffer()
+      ).toString("hex");
 
-      // // upload encypted file
-      const result = await uploadData(bundlr, file, encryptedData);
-      if (result.status) {
-        console.log("https://arweave.net/" + result.txnId);
-        resetFileData();
-        // upload metadata
-        const metadata = `{
-          "contract_address" : "${contractAddress}",
-          "token_id": "${tokenId}",
-          "chain": "${chain}",
-          "key": "${encryptedSymmetricKey}",
-          "txn_id": "${result.txnId}"
-        }`;
-        const resp = await uploadMetadata(bundlr, JSON.parse(metadata));
-        console.log("https://arweave.net/" + resp.txnId);
+      try {
+        // upload encypted file
+        const result = await uploadData(bundlr, encryptedData, file);
+        if (result.txnId) {
+          console.log("https://arweave.net/" + result.txnId);
+          resetFileData();
+          // upload metadata
+          const metadata: Metadata = {
+            name: name,
+            description: description,
+            fileMime: file.type,
+            fileSize: file.size,
+            contractAddress,
+            tokenId,
+            chain,
+            encryptedKey: encryptedSymmetricKey,
+            arweaveTxnId: result.txnId,
+            createdAt: Date.now(),
+          };
+          const resp = await uploadMetadata(bundlr, metadata);
+          console.log("https://arweave.net/" + resp.txnId);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   };

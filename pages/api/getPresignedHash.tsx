@@ -1,5 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerBundlr } from "../../utils/bundlr";
+import Bundlr from "@bundlr-network/client/";
+import { BUNDLR_MAINNET } from "../../constants";
+
+export const getServerBundlr = async (): Promise<Bundlr> => {
+  const key = process.env.NEXT_PUBLIC_BUNDLR_KEY;
+  const serverBundlr = new Bundlr(
+    BUNDLR_MAINNET.bundlrNetwork,
+    BUNDLR_MAINNET.currency,
+    BUNDLR_MAINNET.pk
+  );
+  await serverBundlr.ready();
+
+  return serverBundlr;
+};
 
 const signingMsj = "sign this message to connect to Bundlr.Network";
 
