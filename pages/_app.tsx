@@ -8,7 +8,7 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ALCHEMY_API_KEY } from "../constants";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.polygon, chain.mainnet],
+  [chain.polygon],
   [alchemyProvider({ apiKey: ALCHEMY_API_KEY }), publicProvider()]
 );
 
@@ -17,10 +17,10 @@ const client = createClient({
   connectors: [
     new MetaMaskConnector({
       chains: chains,
-      // options: {
-      //   shimDisconnect: true,
-      //   UNSTABLE_shimOnConnectSelectAccount: true,
-      // },
+      options: {
+        shimDisconnect: true,
+        UNSTABLE_shimOnConnectSelectAccount: true,
+      },
     }),
   ],
   provider,

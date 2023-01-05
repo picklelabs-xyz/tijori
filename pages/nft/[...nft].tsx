@@ -4,24 +4,37 @@ import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
 import { fetcher } from "../../utils/fetcher";
-import { getBaseUrl } from "../../utils/nft";
+import Vault from "../../components/VaultGrid/Vault";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import Modal from "../../components/Lock/Modal";
+import useIsMounted from "../../hooks/useIsMounted";
 
 const NftDetail = () => {
+  const isMounted = useIsMounted();
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { chain } = useNetwork();
   const router = useRouter();
   const { nft } = router.query;
-  const { chain } = useNetwork();
+  const contractAddress = nft?.[0] as string;
+  const tokenId = nft?.[1] as string;
 
-  const baseUrl = getBaseUrl(chain?.id);
-  const path = `${baseUrl}/getNFTMetadata/?contractAddress=${nft?.[0]}&tokenId=${nft?.[1]}`;
+  const baseUrl = chain?.rpcUrls.default;
+  const path = `${baseUrl}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}`;
   const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && chain) {
       setShouldFetch(true);
     }
-  }, [router.isReady]);
+  }, [router.isReady, chain]);
+
+  if (!isMounted) return null;
+
+  if (!chain) {
+    return <div>Please connect wallet</div>;
+  }
 
   return (
     <>
@@ -37,10 +50,33 @@ const NftDetail = () => {
               <div className="my-6">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
+
+              <div className="flex justify-between mt-4 items-center">
+                <div className="font-bold text-lg">Vault</div>
+                <button
+                  className="btn btn-blue text-sm flex items-center"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <PlusIcon className="w-4 h-4 mr-2 inline-block" />
+                  <span>Add Item</span>
+                </button>
+              </div>
+              <Vault
+                contractAddress={contractAddress}
+                tokenId={tokenId}
+                chain={chain.name}
+              />
+              <Modal
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                contractAddress={contractAddress}
+                tokenId={tokenId}
+                chain={chain.name}
+              />
             </div>
           </div>
 
-          <div className="flex gap-16 mt-16">
+          <div className="flex gap-8 mt-16">
             <div className="basis-1/2">
               <h2 className="text-lg font-bold">Traits</h2>
               <div className="flex gap-4 flex-wrap mt-3">
