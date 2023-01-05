@@ -7,7 +7,7 @@ const NavBar = () => {
     <header className="border-b-2 border-b-gray-100 py-4 px-6 text-lg ">
       <div className="container m-auto flex justify-between items-center">
         <h1 className="text-xl font-bold">
-          <Link href="/">LA3 UNLOCK</Link>
+          <Link href="/">TIJORI</Link>
         </h1>
         <div className="flex text-sm items-center">
           <NetworkSelector />
