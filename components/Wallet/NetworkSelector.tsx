@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import useIsMounted from "../../hooks/useIsMounted";
 
+//TODO: Add network logos
 const NetworkSelector = () => {
   const { chain } = useNetwork();
   const { chains, switchNetwork } = useSwitchNetwork();
@@ -26,7 +27,7 @@ const NetworkSelector = () => {
                   key={x.id}
                   value={x.name}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 ${
+                    `relative select-none py-2 pl-10 cursor-pointer ${
                       active ? "bg-amber-100 text-amber-900" : "text-gray-900"
                     }`
                   }

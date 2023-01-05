@@ -13,11 +13,12 @@ const ItemRow = (params: { isHeader?: boolean; data?: VaultItem }) => {
       `https://www.arweave.net/${data?.arweaveTxnId}`
     );
     const content = response.data;
-    const contractAddress = "0x55a8dbe6f191b370885d01e30cb7d36d0fa99f16";
+    const contractAddress = "0x2a0af90bd2c470750a4a42d87bfdfaee7c6d4e4a";
     const chain = "polygon";
-    const tokenId = "12144";
+    const tokenId = "2";
     const acessControlConditions = generateAccessControlConditions(
       contractAddress,
+      "ERC1155",
       chain,
       tokenId
     );

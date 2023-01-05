@@ -22,6 +22,7 @@ export interface Metadata {
 }
 
 /** TODO:
+ * 0. Add access key controls to file metadata
  * 1. Upload button animation
  * 2. Form validation errors and improve form inputs informations like upload size and supported file types
  * 3. Ability to switch between upload file and text box for voucher type information
@@ -30,7 +31,7 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [fileData, setFileData] = useState<Uint8Array | null>(null);
+  const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -47,14 +48,13 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
       //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
         contractAddress,
+        "ERC1155",
         chain,
         tokenId
       );
 
-      const data = Buffer.from(fileData).toString("hex");
-
       const { encryptedFile, encryptedSymmetricKey } = await lit.enryptString(
-        data,
+        fileData,
         chain,
         acessControlConditions
       );
@@ -98,7 +98,9 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (reader.result) {
-          setFileData(Buffer.from(reader.result as ArrayBuffer));
+          setFileData(
+            Buffer.from(reader.result as ArrayBuffer).toString("hex")
+          );
         }
       };
       reader.readAsArrayBuffer(file);

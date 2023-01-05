@@ -5,13 +5,14 @@ const client = new LitJsSdk.LitNodeClient();
 // access rules with owner of nft
 export const generateAccessControlConditions = (
   contractAddress: string,
+  contractType: "ERC721" | "ERC1155" = "ERC721",
   chain: string,
   tokenId: string
 ) => {
   return [
     {
       contractAddress,
-      standardContractType: "ERC721",
+      standardContractType: contractType,
       chain,
       method: "ownerOf",
       parameters: [tokenId],
@@ -32,7 +33,7 @@ class Lit {
   }
 
   async enryptString(
-    str: string,
+    data: string,
     chain: string,
     accessControlConditions: Array<any>
   ) {
@@ -40,7 +41,9 @@ class Lit {
       await this.connect();
     }
     const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain });
-    const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(str);
+    const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(
+      data
+    );
 
     const encryptedSymmetricKey = await this.litNodeClient.saveEncryptionKey({
       accessControlConditions,
@@ -74,15 +77,12 @@ class Lit {
       chain,
       authSig,
     });
-    console.log(symmetricKey);
+
     const decryptedFile = await LitJsSdk.decryptString(
       encryptedString,
       symmetricKey
     );
-    // eslint-disable-next-line no-console
-    console.log({
-      decryptedFile,
-    });
+
     return { decryptedFile };
   }
 }

@@ -47,8 +47,8 @@ export const getTransactions = async (
 
 const mapItem = (item: any): VaultItem => {
   const VaultItem = {
-    name: "abc",
-    description: "description",
+    name: item.filter((tag: any) => tag.name == "name")[0],
+    description: item.filter((tag: any) => tag.name == "description")[0],
     encryptedKey: item.filter((tag: any) => tag.name == "EncryptedKey")[0]
       .value,
     fileSize: 2024,

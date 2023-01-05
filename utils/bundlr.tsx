@@ -31,6 +31,7 @@ export const getWebBundlr = async () => {
   );
   await bundlr.ready();
   console.log("bundlr ready:", bundlr.address);
+  console.log(bundlr);
   return bundlr;
 };
 
@@ -70,12 +71,14 @@ export const uploadMetadata = async (
     { name: "TokenId", value: metadata.tokenId },
     { name: "EncryptedKey", value: metadata.encryptedKey },
     { name: "ArweaveTxnId", value: metadata.arweaveTxnId },
-    { name: "CreatedAt", value: metadata.createdAt },
+    { name: "CreatedAt", value: `${metadata.createdAt}` },
   ]);
 
   if (metadata.description) {
     tags = [{ name: "Description", value: metadata.description }, ...tags];
   }
+
+  console.log(tags);
 
   const resp = await upload(bundlr, JSON.stringify(metadata), tags);
   return resp;
