@@ -27,6 +27,7 @@ const NFT = () => {
   }, [isConnected, chain]);
 
   if (!isMounted) return null;
+  if (chain?.unsupported) return <>The selected chain is not supported!</>;
 
   return (
     <div>

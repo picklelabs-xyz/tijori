@@ -1,6 +1,9 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
-import { Fragment } from "react";
+import {
+  CheckIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
+import React, { Fragment } from "react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import useIsMounted from "../../hooks/useIsMounted";
 
@@ -12,18 +15,30 @@ const NetworkSelector = () => {
 
   if (!isMounted) return null;
 
+  // console.log(chains);
+  // console.log(chain);
   return (
     <>
       {chain && (
         <div className="mr-sm relative">
           <Listbox value={chain?.name} as="div" className="mr-10">
             <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white py-2 px-4 text-left shadow-md sm:text-sm flex items-center gap-2">
-              <img
-                src={`${chain.name.toLowerCase()}.svg`}
-                className="inline w-5 h-5"
-                alt={`${chain.name} logo`}
-              />
-              <span>{chain.name}</span>
+              {chain.unsupported && (
+                <>
+                  <ExclamationTriangleIcon className="w-5 h-5 inline text-red-500" />
+                  <span className="text-red-500">Unsupported</span>
+                </>
+              )}
+              {!chain.unsupported && (
+                <>
+                  <img
+                    src={`${chain.name.toLowerCase()}.svg`}
+                    className="inline w-5 h-5"
+                    alt={`${chain.name} logo`}
+                  />
+                  <span>{chain.name}</span>
+                </>
+              )}
             </Listbox.Button>
 
             <Listbox.Options className="pointer absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
