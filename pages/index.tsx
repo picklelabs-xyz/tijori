@@ -31,18 +31,29 @@ const NFT = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">MY NFTS</h1>
+      <h1 className=" flex justify-between items-center">
+        <span className="text-2xl font-bold">MY NFTS</span>
+        {data && (
+          <span className="text-sm text-slate-500">
+            Total Count: {data.totalCount}
+          </span>
+        )}
+      </h1>
+
       {!isConnected && (
         <div className="mt-2">Please connect your wallet to view your NFTs</div>
       )}
 
       {isConnected && !data && <div>Loading...</div>}
 
-      <div className="mt-5 flex flex-wrap -mx-6">
+      <div className="mt-10 grid grid-cols-4 gap-8 gap-y-12">
         {data &&
           data.ownedNfts.map((nft: any) => (
-            <div className="md:basis-1/4" key={nft.id.tokenId}>
-              <div className="p-6">
+            <div
+              className="rounded shadow-md p-3 bg-slate-100"
+              key={nft.id.tokenId}
+            >
+              <div>
                 <Link
                   href={`/nft/${nft.contract.address}/${ethers.BigNumber.from(
                     nft.id.tokenId
@@ -53,7 +64,10 @@ const NFT = () => {
                     alt={nft.metadata.name}
                     className="w-full object-contain aspect-square"
                   />
-                  <div className="mt-2 text-sm">{nft.title}</div>
+                  <div className="mt-5 text-sm text-slate-600">
+                    {nft.contractMetadata.name}
+                  </div>
+                  <div className="mt-1 text-md">{nft.title}</div>
                 </Link>
               </div>
             </div>
