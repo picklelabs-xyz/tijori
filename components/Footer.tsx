@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DiscordIcon, GithubIcon, TwitterIcon } from "./Social";
+import { DiscordIcon, GithubIcon, TwitterIcon } from "./SocialIcons";
 
 const Footer = () => {
   return (

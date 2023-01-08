@@ -1,22 +1,16 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
+import NFT from "../../types/NFT";
 import UploadForm from "./Form";
 
 interface LocalModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  contractAddress: string;
-  tokenId: string;
+  nft: NFT;
   chain: string;
 }
-const Modal = ({
-  isOpen,
-  setIsOpen,
-  contractAddress,
-  tokenId,
-  chain,
-}: LocalModalProps) => {
+const Modal = ({ isOpen, setIsOpen, nft, chain }: LocalModalProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -64,8 +58,8 @@ const Modal = ({
                   <div className="mt-2">
                     <div className="text-sm text-gray-500 py-4">
                       <UploadForm
-                        contractAddress={contractAddress}
-                        tokenId={tokenId}
+                        contractAddress={nft.contractAddress}
+                        tokenId={nft.tokenId}
                         chain={chain.toLowerCase()}
                       />
                     </div>

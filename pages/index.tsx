@@ -8,7 +8,7 @@ import { fetchNfts } from "../utils/fetcher";
 
 const Card = ({ nft }: { nft: NFT }) => {
   return (
-    <div className="rounded shadow-md p-3 bg-white">
+    <div className="rounded shadow-md p-3 bg-white hover:bg-gray-100">
       <div>
         <Link href={`/nft/${nft.contractAddress}/${nft.tokenId}`}>
           <img

@@ -3,17 +3,17 @@ import { getTransactions } from "../../utils/graphql/queries/getUnlockable";
 import { PhotoIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import VaultItem from "../../types/VaultItem";
 import ItemRow from "./ItemRow";
+import NFT from "../../types/NFT";
 
 interface VaultProps {
-  contractAddress: string;
-  tokenId: string;
+  nft: NFT;
   chain: string;
 }
-const Vault = ({ contractAddress, tokenId, chain }: VaultProps) => {
+const Vault = ({ nft, chain }: VaultProps) => {
   const [data, setData] = useState<VaultItem[]>([]);
   const [loading, setLoading] = useState(false);
   const getData = async () => {
-    const response = await getTransactions(contractAddress, tokenId);
+    const response = await getTransactions(nft.contractAddress, nft.tokenId);
     setData(response);
   };
   useEffect(() => {

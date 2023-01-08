@@ -32,7 +32,7 @@ const NetworkSelector = () => {
               {!chain.unsupported && (
                 <>
                   <img
-                    src={`chains/${chain.name.toLowerCase()}.svg`}
+                    src={`/chains/${chain.name.toLowerCase()}.svg`}
                     className="inline w-5 h-5"
                     alt={`${chain.name} logo`}
                   />

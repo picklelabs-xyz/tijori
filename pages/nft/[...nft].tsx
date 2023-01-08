@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
-import { fetcher } from "../../utils/fetcher";
+import { fetchNftMetdata } from "../../utils/fetcher";
 import Vault from "../../components/VaultGrid/Vault";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Modal from "../../components/Lock/Modal";
@@ -21,7 +21,7 @@ const NftDetail = () => {
 
   const baseUrl = chain?.rpcUrls.default;
   const path = `${baseUrl}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}`;
-  const { data, error } = useSWR(shouldFetch ? path : null, fetcher);
+  const { data, error } = useSWR(shouldFetch ? path : null, fetchNftMetdata);
   // console.log(data);
 
   useEffect(() => {
@@ -41,11 +41,36 @@ const NftDetail = () => {
       {!data && <div>Loading...</div>}
       {data && (
         <div>
-          <div className="flex gap-8">
-            <div className="basis-1/2">
-              <img src={data.media[0].gateway} alt={data.title} />
+          <div className="flex gap-12">
+            <div className="basis-1/3">
+              <div className="rounded shadow-sm bg-slate-100 p-4">
+                <img src={data.image} alt={data.title} className="m-auto" />
+              </div>
+              <div className="mt-6 shadow-sm bg-slate-100 rounded p-4">
+                <h2 className="text-lg font-bold border-b-2 py-2">
+                  Contract Details
+                </h2>
+                <div className="text-sm">
+                  <div className="mt-4 flex justify-between">
+                    <span className="font-semibold">Name</span>
+                    <span>{data.collectionName}</span>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span className="font-semibold">Symbol</span>
+                    <span>{data.contractSymbol}</span>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span className="font-semibold">Token Type</span>
+                    <span>{data.tokenType}</span>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span className="font-semibold">Address</span>
+                    <span>{data.contractAddress}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="basis-1/2">
+            <div className="basis-2/3">
               <h1 className="text-2xl font-bold">{data.title}</h1>
               <div className="my-6">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
@@ -61,65 +86,13 @@ const NftDetail = () => {
                   <span>Add Item</span>
                 </button>
               </div>
-              <Vault
-                contractAddress={contractAddress}
-                tokenId={tokenId}
-                chain={chain.name}
-              />
+              <Vault nft={data} chain={chain.name} />
               <Modal
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                contractAddress={contractAddress}
-                tokenId={tokenId}
+                nft={data}
                 chain={chain.name}
               />
-            </div>
-          </div>
-
-          <div className="flex gap-8 mt-16">
-            <div className="basis-1/2">
-              <h2 className="text-lg font-bold">Traits</h2>
-              <div className="flex gap-4 flex-wrap mt-3">
-                {!data.metadata.attributes && <div>No traits present.</div>}
-                {data.metadata.attributes &&
-                  data.metadata.attributes
-                    .filter((item: any) => item.trait_type != undefined)
-                    .map((item: any) => (
-                      <div
-                        key={item.trait_type}
-                        className="rounded-md bg-indigo-200 p-4 text-center"
-                      >
-                        <div className="uppercase text-xs text-indigo-600">
-                          {item.trait_type}
-                        </div>
-                        <div className="text-sm mt-1">{item.value}</div>
-                      </div>
-                    ))}
-              </div>
-            </div>
-
-            <div className="basis-1/2">
-              <h2 className="text-lg font-bold">Details</h2>
-              <div className="mt-3">
-                <span className="font-semibold mr-2">Contract Name:</span>
-                <span>{data.contractMetadata.name}</span>
-              </div>
-              <div className="mt-3">
-                <span className="font-semibold mr-2">Contract Symbol:</span>
-                <span>{data.contractMetadata.symbol}</span>
-              </div>
-              <div className="mt-3">
-                <span className="font-semibold mr-2">Token Type:</span>
-                <span>{data.contractMetadata.tokenType}</span>
-              </div>
-              <div className="mt-3">
-                <span className="font-semibold mr-2">Total Supply:</span>
-                <span>{data.contractMetadata.totalSupply}</span>
-              </div>
-              <div className="mt-3">
-                <span className="font-semibold mr-2">Address:</span>
-                <span>{data.contract.address}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -127,5 +100,4 @@ const NftDetail = () => {
     </>
   );
 };
-
 export default NftDetail;
