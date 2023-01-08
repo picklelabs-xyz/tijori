@@ -2,6 +2,7 @@ import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import lit, { generateAccessControlConditions } from "../../utils/lit";
 import { getWebBundlr, uploadData, uploadMetadata } from "../../utils/bundlr";
+import useForm from "../../hooks/useForm";
 
 interface FormProps {
   chain: string;
@@ -28,12 +29,29 @@ export interface Metadata {
  * 3. Ability to switch between upload file and text box for voucher type information
  * **/
 const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [fileData, setFileData] = useState<string | null>(null);
+  // const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [file, setFile] = useState<File | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const {
+    formData,
+    fileData,
+    setFileData,
+    handleInputChange,
+    handleSubmit,
+    errors,
+  } = useForm(
+    {
+      name: "",
+      description: "",
+      file: "",
+    },
+    (formData) => console.log(formData, errors)
+  );
+
+  const { name, description, file }: any = formData;
 
   const resetFileData = () => {
     if (fileRef.current) {
@@ -91,22 +109,6 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
     }
   };
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setFileData(
-            Buffer.from(reader.result as ArrayBuffer).toString("hex")
-          );
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
   const initBundlr = async () => {
     const bundlr = await getWebBundlr();
     setBundlr(bundlr);
@@ -118,32 +120,40 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
 
   return (
     <div className="">
-      <form onSubmit={handleUpload} className="grid grid-cols-1 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <div>
           <label className="text-gray-700">Upload File</label>
           <input
+            name="file"
             type="file"
-            onChange={(e) => onFileChange(e)}
+            onChange={handleInputChange}
             className="w-full mt-1 form-input bg-gray-50  border-gray-200 focus:ring-0 focus:border-blue-100"
             ref={fileRef}
           />
+          <p className="text-red-500">{errors.file && errors.file}</p>
         </div>
         <div>
           <label className="text-gray-700">Name</label>
           <input
+            name="name"
             type="text"
             className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleInputChange}
           />
+          <p className="text-red-500">{errors.name && errors.name}</p>
         </div>
         <div>
           <label className="text-gray-700">Description</label>
           <textarea
+            name="description"
             className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleInputChange}
             value={description}
           ></textarea>
+          <p className="text-red-500">
+            {errors.description && errors.description}
+          </p>
         </div>
 
         <button type="submit" className="btn btn-blue xs">
