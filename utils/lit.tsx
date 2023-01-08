@@ -5,7 +5,7 @@ const client = new LitJsSdk.LitNodeClient();
 // access rules with owner of nft
 export const generateAccessControlConditions = (
   contractAddress: string,
-  contractType: "ERC721" | "ERC1155" = "ERC721",
+  contractType: "ERC721" | "ERC1155",
   chain: string,
   tokenId: string
 ) => {
