@@ -43,33 +43,32 @@ const NftDetail = () => {
         <div>
           <div className="flex gap-12">
             <div className="basis-1/3">
-              <div className="rounded shadow-sm bg-slate-100 p-4">
+              <div className="rounded shadow-sm bg-gray-100 p-4">
                 <img src={data.image} alt={data.title} className="m-auto" />
               </div>
-              <div className="mt-6 shadow-sm bg-slate-100 rounded p-4">
-                <h2 className="text-lg font-bold border-b-2 py-2">
+              <div className="mt-4 shadow-sm bg-gray-100 rounded p-4 text-sm">
+                <h2 className="text-lg font-semibold border-b-2 pb-2">
                   Contract Details
                 </h2>
-                <div className="text-sm">
-                  <div className="mt-4 flex justify-between">
-                    <span className="font-semibold">Name</span>
-                    <span>{data.collectionName}</span>
-                  </div>
-                  <div className="mt-2 flex justify-between">
-                    <span className="font-semibold">Symbol</span>
-                    <span>{data.contractSymbol}</span>
-                  </div>
-                  <div className="mt-2 flex justify-between">
-                    <span className="font-semibold">Token Type</span>
-                    <span>{data.tokenType}</span>
-                  </div>
-                  <div className="mt-2 flex justify-between">
-                    <span className="font-semibold">Address</span>
-                    <span>{data.contractAddress}</span>
-                  </div>
+                <div className="mt-4 flex justify-between">
+                  <span className="font-semibold">Name</span>
+                  <span>{data.collectionName}</span>
+                </div>
+                <div className="mt-2 flex justify-between">
+                  <span className="font-semibold">Symbol</span>
+                  <span>{data.contractSymbol}</span>
+                </div>
+                <div className="mt-2 flex justify-between">
+                  <span className="font-semibold">Type</span>
+                  <span>{data.tokenType}</span>
+                </div>
+                <div className="mt-2 flex justify-between">
+                  <span className="font-semibold">Address</span>
+                  <span>{data.contractAddress}</span>
                 </div>
               </div>
             </div>
+
             <div className="basis-2/3">
               <h1 className="text-2xl font-bold">{data.title}</h1>
               <div className="my-6">
