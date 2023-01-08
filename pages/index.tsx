@@ -50,7 +50,7 @@ const NFT = () => {
         {data &&
           data.ownedNfts.map((nft: any) => (
             <div
-              className="rounded shadow-md p-3 bg-slate-100"
+              className="rounded shadow-md p-3 bg-white"
               key={nft.id.tokenId}
             >
               <div>
