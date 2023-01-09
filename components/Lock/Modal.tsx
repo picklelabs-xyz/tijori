@@ -61,6 +61,7 @@ const Modal = ({ isOpen, setIsOpen, nft, chain }: LocalModalProps) => {
                         contractAddress={nft.contractAddress}
                         tokenId={nft.tokenId}
                         chain={chain.toLowerCase()}
+                        tokenType={nft.tokenType}
                       />
                     </div>
                   </div>

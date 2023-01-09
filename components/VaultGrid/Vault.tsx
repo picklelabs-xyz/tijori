@@ -13,8 +13,10 @@ const Vault = ({ nft, chain }: VaultProps) => {
   const [data, setData] = useState<VaultItem[]>([]);
   const [loading, setLoading] = useState(false);
   const getData = async () => {
+    setLoading(true);
     const response = await getTransactions(nft.contractAddress, nft.tokenId);
     setData(response);
+    setLoading(false);
   };
   useEffect(() => {
     getData();

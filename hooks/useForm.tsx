@@ -36,18 +36,23 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     for (const property in formData) {
-      if (!formData[property]) {
-        setErrors((prevState: any) => ({
-          ...prevState,
-          [property]: `${property} ${errMessages.required}`,
-        }));
-      }
+      setFormData({ ...formData, [property]: "" });
     }
     onSubmit?.(formData);
   };
 
-  useEffect(() => {
-  }, [errors]);
+  const resetForm = (fileRef: any) => {
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
+    setFileData(null);
+    for (const property in formData) {
+      setErrors((prevState: any) => ({
+        ...prevState,
+        [property]: `${property} ${errMessages.required}`,
+      }));
+    }
+  };
 
   return {
     formData,
@@ -55,6 +60,7 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     setFileData,
     handleInputChange,
     handleSubmit,
+    resetForm,
     errors,
   };
 };

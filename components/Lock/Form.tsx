@@ -3,35 +3,21 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import lit, { generateAccessControlConditions } from "../../utils/lit";
 import { getWebBundlr, uploadData, uploadMetadata } from "../../utils/bundlr";
 import useForm from "../../hooks/useForm";
+import Metadata from "../../types/Metadata";
 
 interface FormProps {
+  //Check how can we inforce lowercase strings via typescript
   chain: string;
   contractAddress: string;
   tokenId: string;
-}
-export interface Metadata {
-  name: string;
-  description?: string;
-  fileMime: string;
-  fileSize: number;
-  contractAddress: string;
-  tokenId: string;
-  chain: string;
-  encryptedKey: string;
-  arweaveTxnId: string;
-  createdAt: number;
+  tokenType: "ERC721" | "ERC1155";
 }
 
-/** TODO:
- * 0. Add access key controls to file metadata
- * 1. Upload button animation
- * 2. Form validation errors and improve form inputs informations like upload size and supported file types
- * 3. Ability to switch between upload file and text box for voucher type information
- * **/
-const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
+const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
   // const [name, setName] = useState("");
   // const [description, setDescription] = useState("");
   // const [file, setFile] = useState<File | null>(null);
+  // const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -41,6 +27,7 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
     setFileData,
     handleInputChange,
     handleSubmit,
+    resetForm,
     errors,
   } = useForm(
     {
@@ -48,25 +35,17 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
       description: "",
       file: "",
     },
-    (formData) => console.log(formData, errors)
+    (formData) => handleUpload()
   );
 
   const { name, description, file }: any = formData;
 
-  const resetFileData = () => {
-    if (fileRef.current) {
-      fileRef.current.value = "";
-    }
-    setFileData(null);
-  };
-
-  const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleUpload = async () => {
     if (file && fileData && bundlr) {
       //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
         contractAddress,
-        "ERC1155",
+        tokenType,
         chain,
         tokenId
       );
@@ -86,11 +65,10 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
         const result = await uploadData(bundlr, encryptedData, file);
         if (result.txnId) {
           console.log("https://arweave.net/" + result.txnId);
-          resetFileData();
+          resetForm(fileRef);
           // upload metadata
           const metadata: Metadata = {
             name: name,
-            description: description,
             fileMime: file.type,
             fileSize: file.size,
             contractAddress,
@@ -98,8 +76,11 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
             chain,
             encryptedKey: encryptedSymmetricKey,
             arweaveTxnId: result.txnId,
+            accessString: JSON.stringify(acessControlConditions),
             createdAt: Date.now(),
           };
+          if (description !== "") metadata.description = description;
+
           const resp = await uploadMetadata(bundlr, metadata);
           console.log("https://arweave.net/" + resp.txnId);
         }
