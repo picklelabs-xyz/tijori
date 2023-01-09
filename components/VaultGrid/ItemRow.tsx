@@ -7,7 +7,7 @@ import { useState } from "react";
 //TODO: check if we can do typechecking basis other key value pa
 const ItemRow = (params: { isHeader?: boolean; data?: VaultItem }) => {
   const { isHeader = false, data } = params;
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState();
   const unlockItem = async () => {
     const response = await axios.get(
       `https://www.arweave.net/${data?.arweaveTxnId}`

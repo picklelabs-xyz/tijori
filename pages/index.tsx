@@ -1,14 +1,16 @@
+import { WalletIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useAccount, useNetwork } from "wagmi";
+import ConnectWallet from "../components/ConnectWallet";
 import useIsMounted from "../hooks/useIsMounted";
 import NFT from "../types/NFT";
 import { fetchNfts } from "../utils/fetcher";
 
 const Card = ({ nft }: { nft: NFT }) => {
   return (
-    <div className="rounded shadow-md p-3 bg-white">
+    <div className="rounded shadow-md p-3 bg-white hover:bg-gray-100">
       <div>
         <Link href={`/nft/${nft.contractAddress}/${nft.tokenId}`}>
           <img
@@ -35,6 +37,7 @@ const IndexPage = () => {
   const path = `${baseUrl}/getNFTs/?owner=${address}`;
   // +"&excludeFilters[]=SPAM&excludeFilters[]=AIRDROPS";
   const { data, error } = useSWR(shouldFetch ? path : null, fetchNfts);
+  // console.log(data);
 
   useEffect(() => {
     if (isConnected && chain) {
@@ -45,10 +48,7 @@ const IndexPage = () => {
 
   if (!isMounted) return null;
 
-  if (!isConnected)
-    return (
-      <div className="mt-2">Please connect your wallet to view your NFTs</div>
-    );
+  if (!isConnected) return <ConnectWallet />;
 
   if (chain?.unsupported) return <>The selected chain is not supported!</>;
 
@@ -64,7 +64,7 @@ const IndexPage = () => {
       </h1>
       {!data && <div>Loading...</div>}
       {data && (
-        <div className="mt-10 grid grid-cols-4 gap-8 gap-y-12">
+        <div className="mt-6 grid grid-cols-4 gap-8 gap-y-12">
           {data.nfts.map((nft) => (
             <Card nft={nft} key={nft.tokenId} />
           ))}

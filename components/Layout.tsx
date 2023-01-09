@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col min-h-screen">
       <NavBar />
       <div className="grow bg-gray-200">
-        <div className="container mx-auto grow px-2 my-20 ">{children}</div>
+        <div className="container mx-auto grow px-2 my-10 ">{children}</div>
       </div>
       <Footer />
     </div>
