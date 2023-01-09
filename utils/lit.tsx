@@ -23,7 +23,7 @@ export const generateAccessControlConditions = (
         },
       },
     ];
-  } else if (contractType == "ERC1155") {
+  } else {
     return [
       {
         contractAddress,

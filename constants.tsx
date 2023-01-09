@@ -19,7 +19,7 @@ export const BUNDLR_DEV = {
 
 export const BUNDLR_MAINNET = {
   currency: "matic",
-  pk: process.env.NEXT_PUBLIC_MATIC_KEY,
+  pk: process.env.MATIC_KEY,
   providerLink: ALCHMEY_POLYGON_ENDPOINT,
   bundlrNetwork: "https://node2.bundlr.network",
 };
