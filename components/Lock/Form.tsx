@@ -147,7 +147,7 @@ const Form = ({ chain, contractAddress, tokenId }: FormProps) => {
           <label className="text-gray-700">Description</label>
           <textarea
             name="description"
-            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
+            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200 align-top"
             onChange={handleInputChange}
             value={description}
           ></textarea>

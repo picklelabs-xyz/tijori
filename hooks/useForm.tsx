@@ -37,10 +37,9 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     e.preventDefault();
     for (const property in formData) {
       if (!formData[property]) {
-        console.log("xxx", property);
         setErrors((prevState: any) => ({
           ...prevState,
-          [property]: errMessages.required,
+          [property]: `${property} ${errMessages.required}`,
         }));
       }
     }
@@ -48,7 +47,6 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   };
 
   useEffect(() => {
-    console.log("ree", errors);
   }, [errors]);
 
   return {
