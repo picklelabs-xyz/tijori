@@ -61,7 +61,6 @@ const mapItem = (node: any): VaultItem => {
 
 const getData = (tags: Tag[], type: string) => {
   const data = tags.filter((tag: any) => tag.name == type);
-  console.log(data);
   if (data.length > 0) {
     return data[0].value;
   }

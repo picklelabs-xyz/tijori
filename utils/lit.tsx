@@ -9,19 +9,35 @@ export const generateAccessControlConditions = (
   chain: string,
   tokenId: string
 ) => {
-  return [
-    {
-      contractAddress,
-      standardContractType: contractType,
-      chain,
-      method: "ownerOf",
-      parameters: [tokenId],
-      returnValueTest: {
-        comparator: "=",
-        value: ":userAddress",
+  if (contractType == "ERC721") {
+    return [
+      {
+        contractAddress,
+        standardContractType: contractType,
+        chain,
+        method: "ownerOf",
+        parameters: [tokenId],
+        returnValueTest: {
+          comparator: "=",
+          value: ":userAddress",
+        },
       },
-    },
-  ];
+    ];
+  } else if (contractType == "ERC1155") {
+    return [
+      {
+        contractAddress,
+        standardContractType: contractType,
+        chain,
+        method: "balanceOf",
+        parameters: [":userAddress", tokenId],
+        returnValueTest: {
+          comparator: ">",
+          value: "0",
+        },
+      },
+    ];
+  }
 };
 
 class Lit {
@@ -51,6 +67,9 @@ class Lit {
       authSig,
       chain,
     });
+
+    console.log("Access Control");
+    console.log(accessControlConditions);
 
     return {
       encryptedFile: encryptedString,
