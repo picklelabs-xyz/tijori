@@ -36,7 +36,12 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     for (const property in formData) {
-      setFormData({ ...formData, [property]: "" });
+      if (!formData[property]) {
+        setErrors((prevState: any) => ({
+          ...prevState,
+          [property]: `${property} ${errMessages.required}`,
+        }));
+      }
     }
     onSubmit?.(formData);
   };
@@ -47,10 +52,7 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     }
     setFileData(null);
     for (const property in formData) {
-      setErrors((prevState: any) => ({
-        ...prevState,
-        [property]: `${property} ${errMessages.required}`,
-      }));
+      setFormData({ ...formData, [property]: "" });
     }
   };
 
