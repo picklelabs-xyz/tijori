@@ -1,6 +1,6 @@
 import { WebBundlr } from "@bundlr-network/client/";
-import { Metadata } from "../components/Lock/Form";
 import { BUNDLR_MAINNET } from "../constants";
+import Metadata from "../types/Metadata";
 
 interface Tag {
   name: string;
@@ -31,7 +31,7 @@ export const getWebBundlr = async () => {
   );
   await bundlr.ready();
   console.log("bundlr ready:", bundlr.address);
-  console.log(bundlr);
+  // console.log(bundlr);
   return bundlr;
 };
 
@@ -74,12 +74,7 @@ export const uploadMetadata = async (
     { name: "CreatedAt", value: `${metadata.createdAt}` },
   ]);
 
-  if (metadata.description) {
-    tags = [{ name: "Description", value: metadata.description }, ...tags];
-  }
-
-  console.log(tags);
-
+  // console.log(tags);
   const resp = await upload(bundlr, JSON.stringify(metadata), tags);
   return resp;
 };
