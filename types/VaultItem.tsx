@@ -1,8 +1,9 @@
 export default interface VaultItem {
+  txnId: string;
   name: string;
-  description?: string;
   encryptedKey: string;
+  accessString: string;
   fileSize: number;
-  arweaveTxnId: string;
+  fileMime: string;
   timestamp: string;
 }

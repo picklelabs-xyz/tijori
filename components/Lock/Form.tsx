@@ -51,28 +51,23 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
       ).toString("hex");
 
       try {
-        // upload encypted file
-        const result = await uploadData(bundlr, encryptedData, file);
+        const metadata: Metadata = {
+          name: name,
+          description: description,
+          fileMime: file.type,
+          fileSize: file.size,
+          contractAddress,
+          tokenId,
+          tokenType,
+          chain,
+          encryptedKey: encryptedSymmetricKey,
+          accessString: JSON.stringify(acessControlConditions),
+          createdAt: Date.now(),
+        };
+        const result = await uploadData(bundlr, encryptedData, metadata);
         if (result.txnId) {
           console.log("https://arweave.net/" + result.txnId);
           resetForm();
-          // upload metadata
-          const metadata: Metadata = {
-            name: name,
-            fileMime: file.type,
-            fileSize: file.size,
-            contractAddress,
-            tokenId,
-            chain,
-            encryptedKey: encryptedSymmetricKey,
-            arweaveTxnId: result.txnId,
-            accessString: JSON.stringify(acessControlConditions),
-            createdAt: Date.now(),
-          };
-          if (description !== "") metadata.description = description;
-
-          const resp = await uploadMetadata(bundlr, metadata);
-          console.log("https://arweave.net/" + resp.txnId);
         }
       } catch (error) {
         console.log(error);

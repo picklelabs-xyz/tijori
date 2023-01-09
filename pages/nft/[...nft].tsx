@@ -85,7 +85,7 @@ const NftDetail = () => {
               </div>
 
               <div className="flex justify-between mt-6 items-center">
-                <div className="font-bold text-lg">Unlockables</div>
+                <div className="font-bold text-xl">NFT Vault</div>
                 <button
                   className="btn btn-blue text-sm flex items-center"
                   onClick={() => setIsOpen(true)}

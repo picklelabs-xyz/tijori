@@ -5,9 +5,9 @@ export default interface Metadata {
   fileSize: number;
   contractAddress: string;
   tokenId: string;
+  tokenType: string;
   chain: string;
   encryptedKey: string;
-  arweaveTxnId: string;
-  createdAt: number;
   accessString: string;
+  createdAt: number;
 }
