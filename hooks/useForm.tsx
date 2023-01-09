@@ -46,24 +46,30 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     if (e.target.type === "file") {
       onFileChange(e);
     }
+    setErrors((prevState: any) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+        ? ``
+        : `${e.target.name} ${errMessages.required}`,
+    }));
 
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    let isValid = true;
+    let formFilled = true;
     for (const property in formData) {
       if (!formData[property]) {
-        isValid = false;
-
+        formFilled = false;
         setErrors((prevState: any) => ({
           ...prevState,
           [property]: `${property} ${errMessages.required}`,
         }));
       }
     }
-    if (isValid) {
+    if (!errors.file && formFilled) {
+      setErrors({});
       onSubmit?.(formData);
     }
   };
