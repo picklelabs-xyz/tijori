@@ -1,16 +1,20 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import NFT from "../../types/NFT";
-import UploadForm from "./Form";
-
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 interface LocalModalProps {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  nft: NFT;
-  chain: string;
+  loading: boolean;
+  imgUrl: string;
+  title: string;
 }
-const Modal = ({ isOpen, setIsOpen, nft, chain }: LocalModalProps) => {
+const ViewModal = ({
+  isOpen,
+  setIsOpen,
+  loading,
+  imgUrl,
+  title,
+}: LocalModalProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -43,26 +47,16 @@ const Modal = ({ isOpen, setIsOpen, nft, chain }: LocalModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-sm bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-sm bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-semibold text-gray-900 text-center border-b-2 pb-4 flex items-center justify-between"
-                  >
-                    <div>Add Unlockable Item</div>
-                    <XMarkIcon
-                      className="w-5 h-5 inline cursor-pointer"
-                      onClick={() => setIsOpen(false)}
-                    ></XMarkIcon>
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <div className="text-sm text-gray-500 py-4">
-                      <UploadForm
-                        contractAddress={nft.contractAddress}
-                        tokenId={nft.tokenId}
-                        chain={chain.toLowerCase()}
-                        tokenType={nft.tokenType}
-                      />
-                    </div>
+                    className="text-lg font-semibold text-gray-900 text-right pb-4 flex items-center justify-between"
+                  ></Dialog.Title>
+                  <div className="flex justify-center items-center">
+                    {!imgUrl && (
+                      <ArrowPathIcon className="w-10 h-10 animate-spin" />
+                    )}
+                    {imgUrl && <img src={imgUrl} alt={title} />}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -74,4 +68,4 @@ const Modal = ({ isOpen, setIsOpen, nft, chain }: LocalModalProps) => {
   );
 };
 
-export default Modal;
+export default ViewModal;

@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTransactions } from "../../utils/graphql/queries/getUnlockable";
-import {
-  PhotoIcon,
-  LockOpenIcon,
-  ArrowPathIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import VaultItem from "../../types/VaultItem";
 import ItemRow from "./ItemRow";
 import NFT from "../../types/NFT";
@@ -22,7 +18,7 @@ const Vault = ({ nft, chain }: VaultProps) => {
     setData(response);
     setLoading(false);
   };
-  console.log(data);
+
   useEffect(() => {
     getData();
   }, []);
@@ -30,8 +26,11 @@ const Vault = ({ nft, chain }: VaultProps) => {
   return (
     <>
       {loading && (
-        <div className="h-60 mt-6 bg-gray-100 flex justify-center items-center">
-          <ArrowPathIcon className="w-10 h-10 animate-spin" />
+        <div className="h-60 mt-6 bg-gray-100 flex justify-center items-center text-center">
+          <div>
+            <ArrowPathIcon className="w-10 h-10 animate-spin inline-block" />
+            <div className="mt-2">Checking for locked content</div>
+          </div>
         </div>
       )}
 
@@ -39,9 +38,7 @@ const Vault = ({ nft, chain }: VaultProps) => {
         <div className="h-60 mt-4 flex justify-center items-center bg-gray-100 text-center">
           <div>
             <div className="text-xl font-semibold">No Locked Content!</div>
-            <div className="mt-1">
-              This NFT doesnot contain unlockable content.
-            </div>
+            <div className="mt-1">This NFT type has no unlockable content.</div>
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import lit, { generateAccessControlConditions } from "../../utils/lit";
-import { getWebBundlr, uploadData, uploadMetadata } from "../../utils/bundlr";
+import { getWebBundlr, uploadData } from "../../utils/bundlr";
 import Metadata from "../../types/Metadata";
 
 interface FormProps {
@@ -68,6 +68,7 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
         if (result.txnId) {
           console.log("https://arweave.net/" + result.txnId);
           resetForm();
+          window.location.reload();
         }
       } catch (error) {
         console.log(error);

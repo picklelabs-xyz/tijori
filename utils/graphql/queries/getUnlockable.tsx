@@ -52,6 +52,8 @@ const mapItem = (node: any): VaultItem => {
     fileSize: getData(tags, "FileSize"),
     fileMime: getData(tags, "FileMime"),
     accessString: getData(tags, "AccessString"),
+    contractAddress: getData(tags, "ContractAddress"),
+    chain: getData(tags, "Chain"),
     timestamp: getData(tags, "CreatedAt"),
   };
   return VaultItem;

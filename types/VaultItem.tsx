@@ -5,5 +5,7 @@ export default interface VaultItem {
   accessString: string;
   fileSize: number;
   fileMime: string;
+  chain: string;
+  contractAddress: string;
   timestamp: string;
 }
