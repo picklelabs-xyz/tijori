@@ -8,6 +8,8 @@ import Vault from "../../components/VaultGrid/Vault";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Modal from "../../components/Lock/Modal";
 import useIsMounted from "../../hooks/useIsMounted";
+import Link from "next/link";
+import ConnectWallet from "../../components/ConnectWallet";
 
 const NftDetail = () => {
   const isMounted = useIsMounted();
@@ -33,7 +35,7 @@ const NftDetail = () => {
   if (!isMounted) return null;
 
   if (!chain) {
-    return <div>Please connect wallet</div>;
+    return <ConnectWallet />;
   }
 
   return (
@@ -41,7 +43,14 @@ const NftDetail = () => {
       {!data && <div>Loading...</div>}
       {data && (
         <div>
-          <div className="flex gap-12">
+          <div className="text-sm text-gray-700 flex gap-2">
+            <Link href="/">
+              <span>Home</span>
+            </Link>
+            <span>&#62;</span>
+            <span>{data.title}</span>
+          </div>
+          <div className="flex gap-12 mt-6">
             <div className="basis-1/3">
               <div className="rounded shadow-sm bg-gray-100 p-4">
                 <img src={data.image} alt={data.title} className="m-auto" />
@@ -71,12 +80,12 @@ const NftDetail = () => {
 
             <div className="basis-2/3">
               <h1 className="text-2xl font-bold">{data.title}</h1>
-              <div className="my-6">
+              <div className="mt-2">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
 
-              <div className="flex justify-between mt-4 items-center">
-                <div className="font-bold text-lg">Vault</div>
+              <div className="flex justify-between mt-6 items-center">
+                <div className="font-bold text-lg">Unlockables</div>
                 <button
                   className="btn btn-blue text-sm flex items-center"
                   onClick={() => setIsOpen(true)}

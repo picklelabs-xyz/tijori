@@ -15,8 +15,6 @@ const NetworkSelector = () => {
 
   if (!isMounted) return null;
 
-  // console.log(chains);
-  // console.log(chain);
   return (
     <>
       {chain && (
