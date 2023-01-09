@@ -84,7 +84,7 @@ const NftDetail = () => {
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
 
-              <div className="flex justify-between mt-6 items-center">
+              <div className="flex justify-between mt-6 items-end">
                 <div className="font-bold text-xl">NFT Vault</div>
                 <button
                   className="btn btn-blue text-sm flex items-center"

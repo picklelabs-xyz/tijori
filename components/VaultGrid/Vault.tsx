@@ -47,13 +47,11 @@ const Vault = ({ nft, chain }: VaultProps) => {
       )}
 
       {!loading && data.length > 0 && (
-        <div className="bg-gray-100">
-          <div className="font-semibold flex flex-row p-3 gap-4 items-center bg-slate-300 mt-6">
-            <div className="basis-auto">&nbsp;</div>
-            <div className="basis-1/3">Name</div>
-            <div className="basis-1/3">Size</div>
-            <div className="basis-1/3">Creation Date</div>
-            <div className="basis-auto">&nbsp;</div>
+        <div className="bg-gray-100 mt-6">
+          <div className="font-semibold flex flex-row p-3 items-center bg-slate-300">
+            <div className="basis-3/5">Name</div>
+            <div className="basis-1/5 text-right">Size</div>
+            <div className="basis-1/5 text-right">Date Added</div>
             <div>&nbsp;</div>
           </div>
 

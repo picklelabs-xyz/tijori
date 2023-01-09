@@ -45,26 +45,19 @@ const ItemRow = ({ data }: { data: VaultItem }) => {
   };
 
   return (
-    <div className="flex flex-row p-3 gap-4 items-center border-b border-gray-300 text-sm">
-      <div className="basis-auto">
-        <PhotoIcon className="w-5 h-5" />
+    <div className="flex flex-row p-3 items-center border-b border-gray-300 text-sm hover:bg-gray-200 cursor-pointer">
+      <div className="basis-3/5">
+        <PhotoIcon className="w-5 h-5 inline-block mr-4" />
+        {data.name}
       </div>
-      <div className="basis-1/3">{data.name}</div>
-      <div className="basis-1/3">{data.fileSize / 1000} KB</div>
-      <div className="basis-1/3">
+      <div className="basis-1/5 text-right">{data.fileSize / 1000} kB</div>
+      <div className="basis-1/5 text-right">
         {new Date(parseInt(data.timestamp)).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
         })}
       </div>
-      <div className="basis-auto">
-        <LockOpenIcon
-          className="w-5 h-5 text-purple-500 cursor-pointer"
-          onClick={() => unlockItem()}
-        />
-      </div>
-      <div>{/* <img src={img} alt="preview" /> */}</div>
     </div>
   );
 };
