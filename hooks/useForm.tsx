@@ -4,6 +4,14 @@ const errMessages = {
   required: "field is required",
 };
 
+const allowedFileTypes = [
+  "image/gif",
+  "image/png",
+  "image/jpeg",
+  "application/pdf",
+  "application/json",
+];
+
 const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   const [formData, setFormData] = useState(initialState);
   const [fileData, setFileData] = useState<string | null>(null);
@@ -12,16 +20,25 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setFileData(
-            Buffer.from(reader.result as ArrayBuffer).toString("hex")
-          );
-        }
-      };
-      reader.readAsArrayBuffer(file);
+      let fileType = file.type;
+      if (!allowedFileTypes.includes(fileType)) {
+        setErrors((prevState: any) => ({
+          ...prevState,
+          file: `File Type is not allowed`,
+        }));
+        setFileData(null);
+      } else {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result) {
+            setFileData(
+              Buffer.from(reader.result as ArrayBuffer).toString("hex")
+            );
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
     }
   };
 
@@ -35,7 +52,9 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    let isValid = true;
     for (const property in formData) {
+      isValid = false;
       if (!formData[property]) {
         setErrors((prevState: any) => ({
           ...prevState,
@@ -43,7 +62,9 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
         }));
       }
     }
-    onSubmit?.(formData);
+    if (isValid) {
+      onSubmit?.(formData);
+    }
   };
 
   const resetForm = (fileRef: any) => {
