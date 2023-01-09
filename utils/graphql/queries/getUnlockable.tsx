@@ -1,8 +1,7 @@
-import { graphql } from "graphql";
 import { gql } from "graphql-request";
-import { isConstructorDeclaration } from "typescript";
 import { fetchGraphQuery } from "..";
 import VaultItem from "../../../types/VaultItem";
+import { Tag } from "../../bundlr";
 
 const query = gql`
   query GetQuery($contractAddr: String!, $tokenId: String!) {
@@ -37,24 +36,33 @@ export const getTransactions = async (
     },
   };
 
-  const data = await fetchGraphQuery(params);
-  const items = data.transactions.edges.map((edge: any) => {
-    // console.log(edge.node.tags);
-    return mapItem(edge.node.tags);
-  });
+  const response = await fetchGraphQuery(params);
+  const items = response.transactions.edges.map((edge: any) =>
+    mapItem(edge.node)
+  );
   return items;
 };
 
-const mapItem = (item: any): VaultItem => {
+const mapItem = (node: any): VaultItem => {
+  const tags = node.tags;
   const VaultItem = {
-    name: item.filter((tag: any) => tag.name == "name")[0],
-    description: item.filter((tag: any) => tag.name == "description")[0],
-    encryptedKey: item.filter((tag: any) => tag.name == "EncryptedKey")[0]
-      .value,
-    fileSize: 2024,
-    arweaveTxnId: item.filter((tag: any) => tag.name == "ArweaveTxnId")[0]
-      .value,
-    timestamp: "123213123",
+    txnId: node.id,
+    name: getData(tags, "Name"),
+    encryptedKey: getData(tags, "EncryptedKey"),
+    fileSize: getData(tags, "FileSize"),
+    fileMime: getData(tags, "FileMime"),
+    accessString: getData(tags, "AccessString"),
+    contractAddress: getData(tags, "ContractAddress"),
+    chain: getData(tags, "Chain"),
+    timestamp: getData(tags, "CreatedAt"),
   };
   return VaultItem;
+};
+
+const getData = (tags: Tag[], type: string) => {
+  const data = tags.filter((tag: any) => tag.name == type);
+  if (data.length > 0) {
+    return data[0].value;
+  }
+  return "";
 };

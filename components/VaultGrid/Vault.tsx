@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTransactions } from "../../utils/graphql/queries/getUnlockable";
-import { PhotoIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import VaultItem from "../../types/VaultItem";
 import ItemRow from "./ItemRow";
 import NFT from "../../types/NFT";
@@ -18,6 +18,7 @@ const Vault = ({ nft, chain }: VaultProps) => {
     setData(response);
     setLoading(false);
   };
+
   useEffect(() => {
     getData();
   }, []);
@@ -25,14 +26,32 @@ const Vault = ({ nft, chain }: VaultProps) => {
   return (
     <>
       {loading && (
-        <div className="mt-1 h-52 flex items-center justify-center border border-gray-400">
-          No locked content found
+        <div className="h-60 mt-6 bg-gray-100 flex justify-center items-center text-center">
+          <div>
+            <ArrowPathIcon className="w-10 h-10 animate-spin inline-block" />
+            <div className="mt-2">Checking for locked content</div>
+          </div>
+        </div>
+      )}
+
+      {!loading && data.length == 0 && (
+        <div className="h-60 mt-4 flex justify-center items-center bg-gray-100 text-center">
+          <div>
+            <div className="text-xl font-semibold">No Locked Content!</div>
+            <div className="mt-1">This NFT type has no unlockable content.</div>
+          </div>
         </div>
       )}
 
       {!loading && data.length > 0 && (
-        <div className="border border-purple-200 text-center mt-2">
-          <ItemRow isHeader={true} />
+        <div className="bg-gray-100 mt-6">
+          <div className="font-semibold flex flex-row p-3 items-center bg-slate-300">
+            <div className="basis-3/5">Name</div>
+            <div className="basis-1/5 text-right">Size</div>
+            <div className="basis-1/5 text-right">Date Added</div>
+            <div>&nbsp;</div>
+          </div>
+
           {data.map((item: VaultItem) => (
             <ItemRow data={item} key={item.timestamp} />
           ))}

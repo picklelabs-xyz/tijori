@@ -68,10 +68,10 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     }
   };
 
-  const resetForm = (fileRef: any) => {
-    if (fileRef.current) {
-      fileRef.current.value = "";
-    }
+  const resetForm = () => {
+    // if (fileRef.current) {
+    //   fileRef.current.value = "";
+    // }
     setFileData(null);
     for (const property in formData) {
       setFormData({ ...formData, [property]: "" });

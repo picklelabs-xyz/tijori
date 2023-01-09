@@ -2,7 +2,7 @@ import { WebBundlr } from "@bundlr-network/client/";
 import { BUNDLR_MAINNET } from "../constants";
 import Metadata from "../types/Metadata";
 
-interface Tag {
+export interface Tag {
   name: string;
   value: any;
 }
@@ -38,45 +38,32 @@ export const getWebBundlr = async () => {
 // Default app tags for all type of uploads
 const defaultTags: Tag[] = [
   { name: "App-Name", value: "la3-unlock" },
-  { name: "App-version", value: "1.0-alpha" },
+  { name: "App-version", value: "alpha-0.1" },
 ];
 
 // Function to upload encrypted data
 export const uploadData = async (
   bundlr: WebBundlr,
   encryptedData: string,
-  file?: File
-): Promise<{ status: boolean; txnId?: string }> => {
-  let tags = defaultTags.concat([
-    { name: "Content-Type", value: "application/octet-stream" },
-  ]);
-
-  if (file) {
-    tags = [{ name: "mime", value: file.type }, ...tags];
-  }
-
-  return await upload(bundlr, encryptedData, tags);
-};
-
-// Function to upload unlock metadata
-export const uploadMetadata = async (
-  bundlr: WebBundlr,
   metadata: Metadata
 ): Promise<{ status: boolean; txnId?: string }> => {
   let tags = defaultTags.concat([
-    { name: "Content-Type", value: "application/json" },
+    { name: "Content-Type", value: "application/octet-stream" },
     { name: "Name", value: metadata.name },
+    { name: "Description", value: metadata.description },
     { name: "ContractAddress", value: metadata.contractAddress },
     { name: "Chain", value: metadata.chain },
     { name: "TokenId", value: metadata.tokenId },
+    { name: "FileSize", value: `${metadata.fileSize}` },
+    { name: "FileMime", value: metadata.fileMime },
     { name: "EncryptedKey", value: metadata.encryptedKey },
-    { name: "ArweaveTxnId", value: metadata.arweaveTxnId },
+    { name: "AccessString", value: metadata.accessString },
     { name: "CreatedAt", value: `${metadata.createdAt}` },
   ]);
 
-  // console.log(tags);
-  const resp = await upload(bundlr, JSON.stringify(metadata), tags);
-  return resp;
+  console.log(tags);
+
+  return await upload(bundlr, encryptedData, tags);
 };
 
 const upload = async (
