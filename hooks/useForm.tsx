@@ -54,8 +54,9 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     e.preventDefault();
     let isValid = true;
     for (const property in formData) {
-      isValid = false;
       if (!formData[property]) {
+        isValid = false;
+
         setErrors((prevState: any) => ({
           ...prevState,
           [property]: `${property} ${errMessages.required}`,
