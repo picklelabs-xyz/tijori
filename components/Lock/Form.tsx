@@ -1,8 +1,10 @@
 import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import lit, { generateAccessControlConditions } from "../../utils/lit";
+import useForm from "../../hooks/useForm";
 import { getWebBundlr, uploadData } from "../../utils/bundlr";
 import Metadata from "../../types/Metadata";
+import Button from "../Elements/Button";
 
 interface FormProps {
   //Check how can we inforce lowercase strings via typescript
@@ -13,24 +15,36 @@ interface FormProps {
 }
 
 const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [fileData, setFileData] = useState<string | null>(null);
+  // const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [file, setFile] = useState<File | null>(null);
+  // const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const resetForm = () => {
-    if (fileRef.current) {
-      fileRef.current.value = "";
-    }
-    setFileData(null);
-    setName("");
-    setDescription("");
-  };
+  const {
+    formData,
+    fileData,
+    setFileData,
+    handleInputChange,
+    handleSubmit,
+    resetForm,
+    errors,
+  } = useForm(
+    {
+      name: "",
+      description: "",
+      file: "",
+    },
+    (formData) => handleUpload()
+  );
 
-  const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const { name, description, file }: any = formData;
+
+  const handleUpload = async () => {
+    setUploading(true);
+
     if (file && fileData && bundlr) {
       //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
@@ -65,6 +79,8 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
           createdAt: Date.now(),
         };
         const result = await uploadData(bundlr, encryptedData, metadata);
+        setUploading(false);
+
         if (result.txnId) {
           console.log("https://arweave.net/" + result.txnId);
           resetForm();
@@ -72,23 +88,8 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
         }
       } catch (error) {
         console.log(error);
+        setUploading(false);
       }
-    }
-  };
-
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setFileData(
-            Buffer.from(reader.result as ArrayBuffer).toString("hex")
-          );
-        }
-      };
-      reader.readAsArrayBuffer(file);
     }
   };
 
@@ -103,37 +104,46 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
 
   return (
     <div className="">
-      <form onSubmit={handleUpload} className="grid grid-cols-1 gap-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <div>
           <label className="text-gray-700">Upload File</label>
           <input
+            name="file"
             type="file"
-            onChange={(e) => onFileChange(e)}
+            onChange={handleInputChange}
             className="w-full mt-1 form-input bg-gray-50  border-gray-200 focus:ring-0 focus:border-blue-100"
             ref={fileRef}
           />
+          <p className="text-red-500 italic font-extralight">
+            {errors.file && errors.file}
+          </p>
         </div>
         <div>
           <label className="text-gray-700">Name</label>
           <input
+            name="name"
             type="text"
             className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={handleInputChange}
           />
+          <p className="text-red-500 italic font-extralight">
+            {errors.name && errors.name}
+          </p>
         </div>
         <div>
           <label className="text-gray-700">Description</label>
           <textarea
-            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200 align-top"
+            onChange={handleInputChange}
             value={description}
           ></textarea>
+          <p className="text-red-500 italic font-extralight">
+            {errors.description && errors.description}
+          </p>
         </div>
-
-        <button type="submit" className="btn btn-blue xs">
-          Upload
-        </button>
+        <Button type="submit" loading={uploading} />
       </form>
     </div>
   );
