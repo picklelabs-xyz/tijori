@@ -8,6 +8,7 @@ import useIsMounted from "../hooks/useIsMounted";
 import NFT from "../types/NFT";
 import { fetchNfts } from "../utils/fetcher";
 import Page from "../components/Layout/Page";
+import CardSkeleton from "../components/Elements/CardSkeleton";
 
 const Card = ({ nft }: { nft: NFT }) => {
   return (
@@ -65,14 +66,14 @@ const IndexPage = () => {
           </span>
         )}
       </h1>
-      {!data && <div>Loading...</div>}
-      {data && (
-        <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-12">
-          {data.nfts.map((nft) => (
-            <Card nft={nft} key={`${nft.contractSymbol}-${nft.tokenId}`} />
-          ))}
-        </div>
-      )}
+      {/* {!data && <div>Loading...</div>} */}
+      {/* {data && ( */}
+      <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-12">
+        {data?.nfts.map((nft) => (
+          <Card nft={nft} key={`${nft.contractSymbol}-${nft.tokenId}`} />
+        )) || <CardSkeleton count={8} />}
+      </div>
+      {/* )} */}
     </Page>
   );
 };

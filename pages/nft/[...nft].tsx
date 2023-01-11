@@ -11,6 +11,7 @@ import useIsMounted from "../../hooks/useIsMounted";
 import Link from "next/link";
 import ConnectWallet from "../../components/ConnectWallet";
 import Page from "../../components/Layout/Page";
+import Loader from "../../components/Elements/Loader";
 
 const NftDetail = () => {
   const isMounted = useIsMounted();
@@ -43,7 +44,7 @@ const NftDetail = () => {
 
   return (
     <Page>
-      {!data && <div>Loading...</div>}
+      {!data && <Loader />}
       {data && (
         <div>
           <div className="text-sm text-gray-700 flex gap-2">
