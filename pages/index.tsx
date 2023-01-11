@@ -7,6 +7,7 @@ import ConnectWallet from "../components/ConnectWallet";
 import useIsMounted from "../hooks/useIsMounted";
 import NFT from "../types/NFT";
 import { fetchNfts } from "../utils/fetcher";
+import Page from "../components/Layout/Page";
 
 const Card = ({ nft }: { nft: NFT }) => {
   return (
@@ -53,7 +54,7 @@ const IndexPage = () => {
   if (chain?.unsupported) return <>The selected chain is not supported!</>;
 
   return (
-    <div>
+    <Page>
       <h1 className=" flex justify-between items-center">
         <span className="text-2xl font-bold">MY NFTS</span>
         {data && (
@@ -70,7 +71,7 @@ const IndexPage = () => {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 };
 

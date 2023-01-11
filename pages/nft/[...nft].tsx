@@ -10,6 +10,7 @@ import Modal from "../../components/Lock/Modal";
 import useIsMounted from "../../hooks/useIsMounted";
 import Link from "next/link";
 import ConnectWallet from "../../components/ConnectWallet";
+import Page from "../../components/Layout/Page";
 
 const NftDetail = () => {
   const isMounted = useIsMounted();
@@ -40,7 +41,7 @@ const NftDetail = () => {
   }
 
   return (
-    <>
+    <Page>
       {!data && <div>Loading...</div>}
       {data && (
         <div>
@@ -112,7 +113,7 @@ const NftDetail = () => {
           </div>
         </div>
       )}
-    </>
+    </Page>
   );
 };
 export default NftDetail;
