@@ -14,26 +14,27 @@ interface FormProps {
   tokenType: "ERC721" | "ERC1155";
 }
 
+type InputFields = {
+  name: string;
+  description: string;
+  file: File | null;
+};
+
+const initialState: InputFields = {
+  name: "",
+  description: "",
+  file: null,
+};
+
 const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
-  // const [name, setName] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [file, setFile] = useState<File | null>(null);
   const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   const { formData, handleInputChange, handleSubmit, resetForm, errors } =
-    useForm(
-      {
-        name: "",
-        description: "",
-        file: "",
-      },
-      (formData) => handleUpload()
-    );
+    useForm<InputFields>(initialState, () => handleUpload());
 
-  const { name, description, file }: any = formData;
+  const { name, description, file } = formData;
 
   useEffect(() => {
     if (file) {
@@ -53,7 +54,6 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
     setUploading(true);
 
     if (file && fileData && bundlr) {
-      //encrypt data with lit
       const acessControlConditions = generateAccessControlConditions(
         contractAddress,
         tokenType,
@@ -119,7 +119,6 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
             type="file"
             onChange={handleInputChange}
             className="w-full mt-1 form-input bg-gray-50  border-gray-200 focus:ring-0 focus:border-blue-100"
-            ref={fileRef}
           />
           <p className="text-red-500 italic font-extralight">
             {errors.file && errors.file}

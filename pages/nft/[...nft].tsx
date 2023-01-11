@@ -25,6 +25,7 @@ const NftDetail = () => {
   const path = `${baseUrl}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}`;
   const { data, error } = useSWR(shouldFetch ? path : null, fetchNftMetdata);
   // console.log(data);
+  console.log(chain?.blockExplorers);
 
   useEffect(() => {
     if (router.isReady && chain) {
@@ -73,7 +74,13 @@ const NftDetail = () => {
                 </div>
                 <div className="mt-2 flex justify-between">
                   <span className="font-semibold">Address</span>
-                  <span>{data.contractAddress}</span>
+                  <Link
+                    href={`${chain.blockExplorers?.default.url}/address/${data.contractAddress}`}
+                    className="text-blue-900"
+                    target="_blank"
+                  >
+                    <span>{data.contractAddress}</span>
+                  </Link>
                 </div>
               </div>
             </div>

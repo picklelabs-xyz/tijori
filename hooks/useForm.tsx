@@ -1,18 +1,12 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const errMessages = {
   required: "field is required",
 };
 
-const allowedFileTypes = [
-  "image/gif",
-  "image/png",
-  "image/jpeg",
-  "application/pdf",
-  "application/json",
-];
+const allowedFileTypes = ["image/gif", "image/png", "image/jpeg"];
 
-const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
+const useForm = <T,>(initialState: T, onSubmit: () => void) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState<any>({});
 
@@ -21,10 +15,9 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     setFormData({ ...formData, [e.target.name]: file });
 
     if (file) {
-      let fileType = file.type;
       setErrors((prevState: any) => ({
         ...prevState,
-        file: !allowedFileTypes.includes(fileType)
+        file: !allowedFileTypes.includes(file.type)
           ? `File Type is not allowed`
           : "",
       }));
@@ -59,14 +52,11 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     }
     if (!errors.file && formFilled) {
       setErrors({});
-      onSubmit?.(formData);
+      onSubmit();
     }
   };
 
   const resetForm = () => {
-    // if (fileRef.current) {
-    //   fileRef.current.value = "";
-    // }
     for (const property in formData) {
       setFormData({ ...formData, [property]: "" });
     }
