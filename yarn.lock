@@ -1158,10 +1158,10 @@
   "resolved" "https://registry.npmjs.org/@vercel/analytics/-/analytics-0.1.6.tgz"
   "version" "0.1.6"
 
-"@wagmi/core@0.7.9":
-  "integrity" "sha512-97KCELUP5Q1AagRyE7SmpLh4/v3xdcy/XMbybLvvtQbgmi3y5oEzy4h/wJMY1hEZlmicqyWZAHHm6xIr1tP5HA=="
-  "resolved" "https://registry.npmjs.org/@wagmi/core/-/core-0.7.9.tgz"
-  "version" "0.7.9"
+"@wagmi/core@0.7.5":
+  "integrity" "sha512-4pODpOzfZ2Hg4/N8CdIgFvRA4bKTQegGwt+m6xz0EeV0LOXPU9tGiXim9mJ2NUm1bDt6tFxE437NgqPiqQ1xUg=="
+  "resolved" "https://registry.npmjs.org/@wagmi/core/-/core-0.7.5.tgz"
+  "version" "0.7.5"
   dependencies:
     "abitype" "^0.1.8"
     "eventemitter3" "^4.0.7"
@@ -6980,16 +6980,16 @@
   "resolved" "https://registry.npmjs.org/vlq/-/vlq-2.0.4.tgz"
   "version" "2.0.4"
 
-"wagmi@^0.8.10":
-  "integrity" "sha512-svS/Debs6maJX3TlPDXNo+UDfZn8VCHzN2xcMMjPjcu2Z9k2iwFwC0TMLxM1itluzrTcw9n8F8E+f6gb+Aw+EQ=="
-  "resolved" "https://registry.npmjs.org/wagmi/-/wagmi-0.8.10.tgz"
-  "version" "0.8.10"
+"wagmi@^0.8.6":
+  "integrity" "sha512-60pQtwrT7qrXRr68rAJLdPlk9PhDuHvaT1A8cUdEU6bkUamk9F8DHeGQ52NJkBubLLaaUXmPMZw8vWoVheGxWA=="
+  "resolved" "https://registry.npmjs.org/wagmi/-/wagmi-0.8.6.tgz"
+  "version" "0.8.6"
   dependencies:
     "@coinbase/wallet-sdk" "^3.5.3"
     "@tanstack/query-sync-storage-persister" "^4.14.5"
     "@tanstack/react-query" "^4.14.5"
     "@tanstack/react-query-persist-client" "^4.14.5"
-    "@wagmi/core" "0.7.9"
+    "@wagmi/core" "0.7.5"
     "@walletconnect/ethereum-provider" "^1.8.0"
     "abitype" "^0.1.7"
     "use-sync-external-store" "^1.2.0"
