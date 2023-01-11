@@ -18,29 +18,36 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
   // const [name, setName] = useState("");
   // const [description, setDescription] = useState("");
   // const [file, setFile] = useState<File | null>(null);
-  // const [fileData, setFileData] = useState<string | null>(null);
+  const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
-  const {
-    formData,
-    fileData,
-    setFileData,
-    handleInputChange,
-    handleSubmit,
-    resetForm,
-    errors,
-  } = useForm(
-    {
-      name: "",
-      description: "",
-      file: "",
-    },
-    (formData) => handleUpload()
-  );
+  const { formData, handleInputChange, handleSubmit, resetForm, errors } =
+    useForm(
+      {
+        name: "",
+        description: "",
+        file: "",
+      },
+      (formData) => handleUpload()
+    );
 
   const { name, description, file }: any = formData;
+
+  useEffect(() => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setFileData(
+            Buffer.from(reader.result as ArrayBuffer).toString("hex")
+          );
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }, [file]);
 
   const handleUpload = async () => {
     setUploading(true);

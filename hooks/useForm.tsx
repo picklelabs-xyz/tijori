@@ -14,49 +14,38 @@ const allowedFileTypes = [
 
 const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
   const [formData, setFormData] = useState(initialState);
-  const [fileData, setFileData] = useState<string | null>(null);
   const [errors, setErrors] = useState<any>({});
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const checkForFileErrors = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    setFormData({ ...formData, [e.target.name]: file });
+
     if (file) {
       let fileType = file.type;
-      if (!allowedFileTypes.includes(fileType)) {
-        setErrors((prevState: any) => ({
-          ...prevState,
-          file: `File Type is not allowed`,
-        }));
-        setFileData(null);
-      } else {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (reader.result) {
-            setFileData(
-              Buffer.from(reader.result as ArrayBuffer).toString("hex")
-            );
-          }
-        };
-        reader.readAsArrayBuffer(file);
-      }
+      setErrors((prevState: any) => ({
+        ...prevState,
+        file: !allowedFileTypes.includes(fileType)
+          ? `File Type is not allowed`
+          : "",
+      }));
     }
   };
 
   const handleInputChange = (e: any) => {
     if (e.target.type === "file") {
-      onFileChange(e);
+      checkForFileErrors(e);
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setErrors((prevState: any) => ({
+        ...prevState,
+        [e.target.name]: e.target.value
+          ? ``
+          : `${e.target.name} ${errMessages.required}`,
+      }));
     }
-    setErrors((prevState: any) => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-        ? ``
-        : `${e.target.name} ${errMessages.required}`,
-    }));
-
-    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let formFilled = true;
     for (const property in formData) {
@@ -78,7 +67,6 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
     // if (fileRef.current) {
     //   fileRef.current.value = "";
     // }
-    setFileData(null);
     for (const property in formData) {
       setFormData({ ...formData, [property]: "" });
     }
@@ -86,8 +74,6 @@ const useForm = (initialState: any = {}, onSubmit: (value: any) => void) => {
 
   return {
     formData,
-    fileData,
-    setFileData,
     handleInputChange,
     handleSubmit,
     resetForm,
