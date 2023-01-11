@@ -52,8 +52,8 @@ const NftDetail = () => {
             <span>&#62;</span>
             <span>{data.title}</span>
           </div>
-          <div className="flex gap-16 mt-6">
-            <div className="basis-1/3">
+          <div className="md:flex md:gap-16 mt-6">
+            <div className="md:basis-1/3">
               <div className="rounded shadow-sm bg-gray-100 p-4">
                 <img src={data.image} alt={data.title} className="m-auto" />
               </div>
@@ -86,8 +86,8 @@ const NftDetail = () => {
               </div>
             </div>
 
-            <div className="basis-2/3">
-              <h1 className="text-2xl font-bold">{data.title}</h1>
+            <div className="md:basis-2/3">
+              <h1 className="text-2xl font-bold mt-6 md:mt-0">{data.title}</h1>
               <div className="mt-2">
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>

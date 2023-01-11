@@ -65,7 +65,7 @@ const IndexPage = () => {
       </h1>
       {!data && <div>Loading...</div>}
       {data && (
-        <div className="mt-6 grid grid-cols-4 gap-8 gap-y-12">
+        <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-12">
           {data.nfts.map((nft) => (
             <Card nft={nft} key={nft.tokenId} />
           ))}
