@@ -6,6 +6,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ALCHEMY_API_KEY } from "../constants";
+import { Analytics } from "@vercel/analytics/react";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.polygon],
@@ -32,6 +33,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <WagmiConfig client={client}>
       <Layout>
         <Component {...pageProps} />
+        <Analytics />
       </Layout>
     </WagmiConfig>
   );
