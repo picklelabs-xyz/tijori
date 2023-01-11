@@ -7,6 +7,7 @@ import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ALCHEMY_API_KEY } from "../constants";
 import { Analytics } from "@vercel/analytics/react";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const { chains, provider, webSocketProvider } = configureChains(
   [chain.polygon],
