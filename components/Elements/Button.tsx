@@ -1,9 +1,9 @@
 interface ButtonProps {
   loading?: boolean;
-  type: "button" | "submit" | "reset" | undefined;
+  type: "button" | "submit" | "reset";
 }
 
-const Button = ({ loading, type }: ButtonProps) => {
+const Button = ({ loading, type = "button" }: ButtonProps) => {
   return (
     <button
       disabled={loading}

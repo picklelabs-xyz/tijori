@@ -5,7 +5,13 @@ const errMessages = {
 };
 
 const allowedFileTypes = ["image/gif", "image/png", "image/jpeg"];
-
+/*TODO:
+ * - Refactor error handing
+ * - type interface for errors
+ * - upload size validation
+ * - remove description from required field
+ * - handle sdk errors - lit & bundlr
+ */
 const useForm = <T,>(initialState: T, onSubmit: () => void) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState<any>({});
@@ -24,9 +30,11 @@ const useForm = <T,>(initialState: T, onSubmit: () => void) => {
     }
   };
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (e.target.type === "file") {
-      checkForFileErrors(e);
+      checkForFileErrors(e as ChangeEvent<HTMLInputElement>);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
       setErrors((prevState: any) => ({
