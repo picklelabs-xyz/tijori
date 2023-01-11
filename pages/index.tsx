@@ -53,6 +53,8 @@ const IndexPage = () => {
 
   if (chain?.unsupported) return <>The selected chain is not supported!</>;
 
+  if (error) return <>{error.message}</>;
+
   return (
     <Page>
       <h1 className=" flex justify-between items-center">
@@ -67,7 +69,7 @@ const IndexPage = () => {
       {data && (
         <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-12">
           {data.nfts.map((nft) => (
-            <Card nft={nft} key={nft.tokenId} />
+            <Card nft={nft} key={`${nft.contractSymbol}-${nft.tokenId}`} />
           ))}
         </div>
       )}

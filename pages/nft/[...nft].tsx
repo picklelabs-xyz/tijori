@@ -26,7 +26,6 @@ const NftDetail = () => {
   const path = `${baseUrl}/getNFTMetadata/?contractAddress=${contractAddress}&tokenId=${tokenId}`;
   const { data, error } = useSWR(shouldFetch ? path : null, fetchNftMetdata);
   // console.log(data);
-  console.log(chain?.blockExplorers);
 
   useEffect(() => {
     if (router.isReady && chain) {
@@ -39,6 +38,8 @@ const NftDetail = () => {
   if (!chain) {
     return <ConnectWallet />;
   }
+
+  if (error) return <>{error.message}</>;
 
   return (
     <Page>
