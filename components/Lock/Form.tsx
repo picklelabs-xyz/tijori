@@ -5,6 +5,7 @@ import useForm from "../../hooks/useForm";
 import { getWebBundlr, uploadData } from "../../utils/bundlr";
 import Metadata from "../../types/Metadata";
 import Button from "../Elements/Button";
+import Input from "../Elements/Input";
 
 interface FormProps {
   //Check how can we inforce lowercase strings via typescript
@@ -114,41 +115,34 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <div>
           <label className="text-gray-700">Upload File</label>
-          <input
+          <Input
             name="file"
             type="file"
             onChange={handleInputChange}
-            className="w-full mt-1 form-input bg-gray-50  border-gray-200 focus:ring-0 focus:border-blue-100"
+            error={errors.file}
           />
-          <p className="text-red-500 italic font-extralight">
-            {errors.file && errors.file}
-          </p>
         </div>
         <div>
           <label className="text-gray-700">Name</label>
-          <input
+          <Input
             name="name"
             type="text"
-            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200"
             value={name}
             onChange={handleInputChange}
+            error={errors.name}
           />
-          <p className="text-red-500 italic font-extralight">
-            {errors.name && errors.name}
-          </p>
         </div>
         <div>
           <label className="text-gray-700">Description</label>
-          <textarea
+          <Input
             name="description"
-            className="w-full mt-1 bg-gray-50 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-blue-200 align-top"
+            type="textarea"
             onChange={handleInputChange}
             value={description}
-          ></textarea>
-          <p className="text-red-500 italic font-extralight">
-            {errors.description && errors.description}
-          </p>
+            error={errors.description}
+          />
         </div>
+        {/* {console.log("errors", errors)} */}
         <Button type="submit" loading={uploading} />
       </form>
     </div>
