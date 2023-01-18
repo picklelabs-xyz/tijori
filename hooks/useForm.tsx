@@ -5,10 +5,11 @@ const errMessages = {
 };
 
 const allowedFileTypes = ["image/gif", "image/png", "image/jpeg"];
+const allowedFileSize = 60000;
 /*TODO:
- * - Refactor error handing
+ * - Refactor error handing ✅ 
  * - type interface for errors
- * - upload size validation
+ * - upload size validation ✅ 
  * - remove description from required field
  * - handle sdk errors - lit & bundlr
  */
@@ -16,16 +17,33 @@ const useForm = <T,>(initialState: T, onSubmit: () => void) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState<any>({});
 
-  const checkForFileErrors = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    setFormData({ ...formData, [e.target.name]: file });
+  const checkForErrors = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.type === "file") {
+      const file = (e as ChangeEvent<HTMLInputElement>).target.files?.[0];
 
-    if (file) {
+      if (file) {
+        console.log(file.size)
+        let errorMessage = "";
+
+        if (!allowedFileTypes.includes(file.type)){
+          errorMessage = `File Type is not allowed`
+        } else if (file.size > allowedFileSize) {
+          errorMessage = `File cannot be larger than ${allowedFileSize/1000}KB`
+        }
+
+        setErrors((prevState: any) => ({
+          ...prevState,
+          file: errorMessage
+        }));
+      }
+    } else {
       setErrors((prevState: any) => ({
         ...prevState,
-        file: !allowedFileTypes.includes(file.type)
-          ? `File Type is not allowed`
-          : "",
+        [e.target.name]: e.target.value
+          ? ``
+          : `${e.target.name} ${errMessages.required}`,
       }));
     }
   };
@@ -33,16 +51,13 @@ const useForm = <T,>(initialState: T, onSubmit: () => void) => {
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    checkForErrors(e);
+
     if (e.target.type === "file") {
-      checkForFileErrors(e as ChangeEvent<HTMLInputElement>);
+      const file = (e as ChangeEvent<HTMLInputElement>).target.files?.[0];
+      setFormData({ ...formData, [e.target.name]: file });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
-      setErrors((prevState: any) => ({
-        ...prevState,
-        [e.target.name]: e.target.value
-          ? ``
-          : `${e.target.name} ${errMessages.required}`,
-      }));
     }
   };
 
