@@ -114,32 +114,32 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
     <div className="">
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         <div>
-          <label className="text-gray-700">Upload File</label>
           <Input
             name="file"
             type="file"
             onChange={handleInputChange}
             error={errors.file}
+            label="Upload File"
           />
         </div>
         <div>
-          <label className="text-gray-700">Name</label>
           <Input
             name="name"
             type="text"
             value={name}
             onChange={handleInputChange}
             error={errors.name}
+            label="Name"
           />
         </div>
         <div>
-          <label className="text-gray-700">Description</label>
           <Input
             name="description"
             type="textarea"
             onChange={handleInputChange}
             value={description}
             error={errors.description}
+            label="Description"
           />
         </div>
         {/* {console.log("errors", errors)} */}
