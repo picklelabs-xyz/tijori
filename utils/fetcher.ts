@@ -4,7 +4,8 @@ import { Fetcher } from "swr";
 import NFT from "../types/NFT";
 import { ethers } from "ethers";
 
-export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+export const fetcher = (url: string, token: string) =>
+  axios.get(url, { headers: { Authorization: token } }).then((res) => res.data);
 
 export const fetchNfts: Fetcher<NFTList> = async (url: string) => {
   const response = await axios.get(url);

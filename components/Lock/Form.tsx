@@ -7,7 +7,6 @@ import Metadata from "../../types/Metadata";
 import Button from "../Elements/Button";
 
 interface FormProps {
-  //Check how can we inforce lowercase strings via typescript
   chain: string;
   contractAddress: string;
   tokenId: string;
