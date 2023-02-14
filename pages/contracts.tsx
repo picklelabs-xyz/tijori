@@ -12,12 +12,12 @@ const Contracts = () => {
   const { address, isConnected } = useAccount();
   const isMounted = useIsMounted();
   const { chain } = useNetwork();
-  const path = `https://api.nftport.xyz/v0/accounts/contracts/${address}?chain=polygon&type=owns_contracts`;
+  const path = `https://api.nftport.xyz/v0/accounts/contracts/${address}?chain=${chain?.name.toLowerCase()}&type=owns_contracts`;
   const { data, error } = useSWR(
     shouldFetch ? [path, "57192dd0-b371-45be-be04-add1a30fae1b"] : null,
     fetcher
   );
-  // console.log(data);
+  console.log(data);
 
   useEffect(() => {
     if (isConnected && chain) {
@@ -33,7 +33,6 @@ const Contracts = () => {
   if (chain?.unsupported) return <>The selected chain is not supported!</>;
 
   if (error) return <>{error.message}</>;
-  console.log(data);
   return (
     <Page>
       <h1 className=" flex justify-between items-center">
@@ -46,7 +45,7 @@ const Contracts = () => {
             key={contract.name}
           >
             <div>
-              <Link href={"#"}>
+              <Link href={`/collection/${contract.address}`}>
                 <div className="h-40 bg-gray-400"></div>
                 <div className="mt-5 text-sm text-slate-600">
                   {contract.symbol} - {contract.type}

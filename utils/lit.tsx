@@ -40,6 +40,27 @@ export const generateAccessControlConditions = (
   }
 };
 
+// access rules with any token of the contract
+export const generateACCForContract = (
+  contractAddress: string,
+  contractType: "ERC721" | "ERC1155",
+  chain: string
+) => {
+  return [
+    {
+      contractAddress,
+      standardContractType: contractType,
+      chain,
+      method: "balanceOf",
+      parameters: [":userAddress"],
+      returnValueTest: {
+        comparator: ">=",
+        value: "1",
+      },
+    },
+  ];
+};
+
 class Lit {
   private litNodeClient: any;
 

@@ -38,7 +38,7 @@ export const getWebBundlr = async () => {
 // Default app tags for all type of uploads
 const defaultTags: Tag[] = [
   { name: "App-Name", value: "la3-unlock" },
-  { name: "App-version", value: "alpha-0.1" },
+  { name: "App-version", value: "20230214" },
 ];
 
 // Function to upload encrypted data
@@ -53,7 +53,7 @@ export const uploadData = async (
     { name: "Description", value: metadata.description },
     { name: "ContractAddress", value: metadata.contractAddress },
     { name: "Chain", value: metadata.chain },
-    { name: "TokenId", value: metadata.tokenId },
+    // { name: "TokenId", value: metadata.tokenId },
     { name: "FileSize", value: `${metadata.fileSize}` },
     { name: "FileMime", value: metadata.fileMime },
     { name: "EncryptedKey", value: metadata.encryptedKey },

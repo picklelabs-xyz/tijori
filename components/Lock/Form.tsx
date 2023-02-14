@@ -1,16 +1,20 @@
 import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import lit, { generateAccessControlConditions } from "../../utils/lit";
+import lit, {
+  generateAccessControlConditions,
+  generateACCForContract,
+} from "../../utils/lit";
 import useForm from "../../hooks/useForm";
 import { getWebBundlr, uploadData } from "../../utils/bundlr";
 import Metadata from "../../types/Metadata";
 import Button from "../Elements/Button";
 
-interface FormProps {
+export interface FormProps {
   chain: string;
   contractAddress: string;
-  tokenId: string;
-  tokenType: "ERC721" | "ERC1155";
+  tokenId?: string;
+  tokenStandard: "ERC721" | "ERC1155";
+  //   lockLevel: "nft" | "contract";
 }
 
 type InputFields = {
@@ -25,7 +29,13 @@ const initialState: InputFields = {
   file: null,
 };
 
-const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
+const Form = ({
+  chain,
+  contractAddress,
+  tokenId,
+  tokenStandard,
+}: FormProps) => {
+  const lockLevel = "contract";
   const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -53,12 +63,15 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
     setUploading(true);
 
     if (file && fileData && bundlr) {
-      const acessControlConditions = generateAccessControlConditions(
-        contractAddress,
-        tokenType,
-        chain,
-        tokenId
-      );
+      const acessControlConditions =
+        lockLevel != "contract"
+          ? generateAccessControlConditions(
+              contractAddress,
+              tokenStandard,
+              chain,
+              tokenId as string
+            )
+          : generateACCForContract(contractAddress, tokenStandard, chain);
 
       const { encryptedFile, encryptedSymmetricKey } = await lit.enryptString(
         fileData,
@@ -77,8 +90,8 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
           fileMime: file.type,
           fileSize: file.size,
           contractAddress,
-          tokenId,
-          tokenType,
+          // tokenId,
+          tokenStandard,
           chain,
           encryptedKey: encryptedSymmetricKey,
           accessString: JSON.stringify(acessControlConditions),

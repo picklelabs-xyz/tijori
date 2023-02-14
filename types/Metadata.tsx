@@ -4,8 +4,8 @@ export default interface Metadata {
   fileMime: string;
   fileSize: number;
   contractAddress: string;
-  tokenId: string;
-  tokenType: string;
+  tokenId?: string;
+  tokenStandard: string;
   chain: string;
   encryptedKey: string;
   accessString: string;

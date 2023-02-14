@@ -24,6 +24,22 @@ const query = gql`
   }
 `;
 
+const contractQuery = gql`
+  query GetContractQuery($contractAddr: String!) {
+    transactions(tags: [{ name: "ContractAddress", values: [$contractAddr] }]) {
+      edges {
+        node {
+          id
+          tags {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const getTransactions = async (
   contractAddr: string,
   tokenId: string
@@ -33,6 +49,23 @@ export const getTransactions = async (
     variables: {
       contractAddr: contractAddr,
       tokenId: tokenId,
+    },
+  };
+
+  const response = await fetchGraphQuery(params);
+  const items = response.transactions.edges.map((edge: any) =>
+    mapItem(edge.node)
+  );
+  return items;
+};
+
+export const getTransactionsForContract = async (
+  contractAddr: string
+): Promise<VaultItem[]> => {
+  const params = {
+    query: contractQuery,
+    variables: {
+      contractAddr: contractAddr,
     },
   };
 

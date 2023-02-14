@@ -31,7 +31,7 @@ const mapApiResponse = (item: any): NFT => {
     description: item.metadata.description,
     image: item.media[0].gateway,
     tokenId: ethers.BigNumber.from(item.id.tokenId).toString(),
-    tokenType: item.contractMetadata.tokenType,
+    tokenStandard: item.contractMetadata.tokenType,
     collectionName: item.contractMetadata.name,
     contractAddress: item.contract.address,
     contractSymbol: item.contractMetadata.symbol,

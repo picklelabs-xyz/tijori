@@ -12,6 +12,7 @@ const Page = (props: Props) => {
     description = "Tijori NFT- Securely lock and access digital content with NFTs using Tijori",
     children,
   } = props;
+
   return (
     <>
       <Head>
