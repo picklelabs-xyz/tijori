@@ -7,7 +7,7 @@ import Page from "../components/Layout/Page";
 import useIsMounted from "../hooks/useIsMounted";
 import { fetcher } from "../utils/fetcher";
 
-const Contracts = () => {
+const Collections = () => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { address, isConnected } = useAccount();
   const isMounted = useIsMounted();
@@ -38,19 +38,18 @@ const Contracts = () => {
       <h1 className=" flex justify-between items-center">
         <span className="text-2xl font-bold">My Collections</span>
       </h1>
-      <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-12">
+      <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-6 gap-8 gap-y-12">
         {data?.contracts.map((contract: any) => (
           <div
-            className="rounded shadow-md p-3 bg-white hover:bg-gray-100"
+            className="rounded shadow-md p-3 bg-white hover:bg-gray-100 border-t-4 border-red-400"
             key={contract.name}
           >
             <div>
               <Link href={`/collection/${contract.address}`}>
-                <div className="h-40 bg-gray-400"></div>
-                <div className="mt-5 text-sm text-slate-600">
-                  {contract.symbol} - {contract.type}
-                </div>
                 <div className="mt-1 text-md">{contract.name}</div>
+                <div className="text-xs mt-2 text-slate-600">
+                  {contract.symbol} : {contract.type}
+                </div>
               </Link>
             </div>
           </div>
@@ -60,4 +59,4 @@ const Contracts = () => {
   );
 };
 
-export default Contracts;
+export default Collections;

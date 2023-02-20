@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  getTransactions,
+  getLockedItems,
   getTransactionsForContract,
 } from "../../utils/graphql/queries/getUnlockable";
 import {
@@ -15,7 +15,7 @@ import VaultSkeleton from "../Elements/VaultSkeleton";
 
 interface VaultProps {
   contractAddress: string;
-  tokenId: string;
+  tokenId?: string;
   chain: string;
 }
 const Vault = ({ contractAddress, chain, tokenId }: VaultProps) => {
@@ -23,7 +23,10 @@ const Vault = ({ contractAddress, chain, tokenId }: VaultProps) => {
   const [loading, setLoading] = useState(false);
   const getData = async () => {
     setLoading(true);
-    const response = await getTransactionsForContract(contractAddress);
+    const response = tokenId
+      ? await getLockedItems(contractAddress, tokenId)
+      : await getTransactionsForContract(contractAddress);
+
     setData(response);
     setLoading(false);
   };

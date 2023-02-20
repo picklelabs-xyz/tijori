@@ -7,6 +7,7 @@ import Vault from "./VaultGrid/Vault";
 
 const VaultWrapper = (props: FormProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       <div className="flex justify-between mt-6 items-end">

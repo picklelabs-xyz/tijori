@@ -1,14 +1,17 @@
-import { gql } from "graphql-request";
+import { batchRequests, gql } from "graphql-request";
 import { fetchGraphQuery } from "..";
+import { ARWEAVE_GRAPHQL_ENDPOINT } from "../../../constants";
 import VaultItem from "../../../types/VaultItem";
 import { Tag } from "../../bundlr";
 
-const query = gql`
-  query GetQuery($contractAddr: String!, $tokenId: String!) {
+const tokenQuery = gql`
+  query ($contractAddr: String!, $tokenId: String!) {
     transactions(
       tags: [
         { name: "ContractAddress", values: [$contractAddr] }
         { name: "TokenId", values: [$tokenId] }
+        { name: "App-Version", values: ["20230214"] }
+        { name: "Lock-Type", values: ["token"] }
       ]
     ) {
       edges {
@@ -25,8 +28,14 @@ const query = gql`
 `;
 
 const contractQuery = gql`
-  query GetContractQuery($contractAddr: String!) {
-    transactions(tags: [{ name: "ContractAddress", values: [$contractAddr] }]) {
+  query ($contractAddr: String!) {
+    transactions(
+      tags: [
+        { name: "ContractAddress", values: [$contractAddr] }
+        { name: "App-Version", values: ["20230214"] }
+        { name: "Lock-Type", values: ["contract"] }
+      ]
+    ) {
       edges {
         node {
           id
@@ -40,22 +49,52 @@ const contractQuery = gql`
   }
 `;
 
-export const getTransactions = async (
-  contractAddr: string,
-  tokenId: string
-): Promise<VaultItem[]> => {
-  const params = {
-    query,
-    variables: {
-      contractAddr: contractAddr,
-      tokenId: tokenId,
-    },
-  };
+// export const getTransactions = async (
+//   contractAddr: string,
+//   tokenId: string
+// ): Promise<VaultItem[]> => {
+//   const params = {
+//     tokenQuery,
+//     variables: {
+//       contractAddr: contractAddr,
+//       tokenId: tokenId,
+//     },
+//   };
 
-  const response = await fetchGraphQuery(params);
-  const items = response.transactions.edges.map((edge: any) =>
-    mapItem(edge.node)
+//   const response = await fetchGraphQuery(params);
+//   const items = response.transactions.edges.map((edge: any) =>
+//     mapItem(edge.node)
+//   );
+//   return items;
+// };
+
+export const getLockedItems = async (
+  contractAddr: string,
+  tokenId?: string
+) => {
+  const response = await batchRequests(ARWEAVE_GRAPHQL_ENDPOINT, [
+    {
+      document: contractQuery,
+      variables: {
+        contractAddr: contractAddr,
+        tokenId: tokenId,
+      },
+    },
+    {
+      document: contractQuery,
+      variables: { contractAddr: contractAddr },
+    },
+  ]);
+
+  // console.log(response);
+
+  let data: any = [];
+  const combinedTxns = response.map((item: any) =>
+    data.push(...item.data.transactions.edges)
   );
+  // console.log(data);
+
+  const items = data.map((edge: any) => mapItem(edge.node));
   return items;
 };
 

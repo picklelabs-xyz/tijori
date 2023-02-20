@@ -24,4 +24,6 @@ export const BUNDLR_MAINNET = {
   bundlrNetwork: "https://node2.bundlr.network",
 };
 
-export const ARWEAVE_GRAPH_ENDPOINT = "https://www.arweave.net/graphql";
+export const ARWEAVE_GRAPHQL_ENDPOINT =
+  process.env.NEXT_PUBLIC_ARWEAVE_GRAPHQL_ENDPOINT ??
+  "https://www.arweave.net/graphql";

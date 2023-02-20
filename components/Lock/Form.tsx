@@ -1,9 +1,6 @@
 import { WebBundlr } from "@bundlr-network/client";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import lit, {
-  generateAccessControlConditions,
-  generateACCForContract,
-} from "../../utils/lit";
+import lit, { generateAccessControlConditions } from "../../utils/lit";
 import useForm from "../../hooks/useForm";
 import { getWebBundlr, uploadData } from "../../utils/bundlr";
 import Metadata from "../../types/Metadata";
@@ -14,7 +11,6 @@ export interface FormProps {
   contractAddress: string;
   tokenId?: string;
   tokenStandard: "ERC721" | "ERC1155";
-  //   lockLevel: "nft" | "contract";
 }
 
 type InputFields = {
@@ -35,7 +31,6 @@ const Form = ({
   tokenId,
   tokenStandard,
 }: FormProps) => {
-  const lockLevel = "contract";
   const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -63,20 +58,17 @@ const Form = ({
     setUploading(true);
 
     if (file && fileData && bundlr) {
-      const acessControlConditions =
-        lockLevel != "contract"
-          ? generateAccessControlConditions(
-              contractAddress,
-              tokenStandard,
-              chain,
-              tokenId as string
-            )
-          : generateACCForContract(contractAddress, tokenStandard, chain);
+      const accessControlConditions = generateAccessControlConditions(
+        contractAddress,
+        tokenStandard,
+        chain,
+        tokenId
+      );
 
       const { encryptedFile, encryptedSymmetricKey } = await lit.enryptString(
         fileData,
         chain,
-        acessControlConditions
+        accessControlConditions
       );
 
       const encryptedData = Buffer.from(
@@ -90,11 +82,11 @@ const Form = ({
           fileMime: file.type,
           fileSize: file.size,
           contractAddress,
-          // tokenId,
+          tokenId,
           tokenStandard,
           chain,
           encryptedKey: encryptedSymmetricKey,
-          accessString: JSON.stringify(acessControlConditions),
+          accessString: JSON.stringify(accessControlConditions),
           createdAt: Date.now(),
         };
         const result = await uploadData(bundlr, encryptedData, metadata);
