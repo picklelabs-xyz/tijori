@@ -3,18 +3,20 @@ import { useRouter } from "next/router";
 import { useNetwork } from "wagmi";
 import Page from "../../components/Layout/Page";
 import VaultWrapper from "../../components/VaultWrapper";
+import useApi from "../../hooks/useApi";
 
 const CollectionDetail = () => {
   const router = useRouter();
   const { chain } = useNetwork();
-  const { id: contractId } = router.query;
-  console.log(contractId);
+  const { id: contractAddress } = router.query;
+  const url = `https://api.nftport.xyz/v0/nfts/${contractAddress}`;
+  const { data, error } = useApi(url);
 
   return (
     <Page>
       <div>
         <div className="text-sm text-gray-700 flex gap-2">
-          <Link href="/">
+          <Link href="/collections">
             <span>Home</span>
           </Link>
           <span>&#62;</span>
@@ -29,19 +31,19 @@ const CollectionDetail = () => {
               </h2>
               <div className="mt-4 flex justify-between">
                 <span className="font-semibold">Name</span>
-                <span>Collection Name</span>
+                <span>{data ? data.contract.name : ""}</span>
               </div>
               <div className="mt-2 flex justify-between">
                 <span className="font-semibold">Symbol</span>
-                <span>Symbol</span>
+                <span>{data?.contract.symbol}</span>
               </div>
               <div className="mt-2 flex justify-between">
                 <span className="font-semibold">Token Standard</span>
-                <span>ERC721</span>
+                <span>{data ? data.contract.type : ""}</span>
               </div>
               <div className="mt-2 flex justify-between">
                 <span className="font-semibold">Total Supply</span>
-                <span>1000</span>
+                <span>{data ? data.total : ""}</span>
               </div>
               <div className="mt-2 flex justify-between">
                 <span className="font-semibold">Address</span>
@@ -57,10 +59,10 @@ const CollectionDetail = () => {
               Content uploaded at the contract level will be available for NFTs
               of this collection.
             </div>
-            {chain && contractId && (
+            {chain && contractAddress && (
               <VaultWrapper
                 chain={chain.name}
-                contractAddress={contractId as string}
+                contractAddress={contractAddress as string}
                 tokenStandard="ERC721"
               />
             )}

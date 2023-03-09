@@ -1,3 +1,4 @@
+import { Collection } from "./../types/Collection";
 import { NFTList } from "./../types/NFT";
 import axios from "axios";
 import { Fetcher } from "swr";
