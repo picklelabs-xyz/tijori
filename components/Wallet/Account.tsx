@@ -4,10 +4,17 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { useAccount, useDisconnect } from "wagmi";
+import useSiwe from "../../hooks/useSiwe";
 
 const Account = () => {
   const { address } = useAccount();
-  const { disconnect } = useDisconnect();
+  const { logout } = useSiwe();
+
+  const { disconnect } = useDisconnect({
+    onSuccess() {
+      logout();
+    },
+  });
 
   return (
     <div>

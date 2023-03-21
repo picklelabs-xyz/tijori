@@ -11,6 +11,11 @@ interface UploadResponse {
   txnId?: string;
 }
 
+enum LockType {
+  CONTRACT = "contract",
+  TOKEN = "token",
+}
+
 export const getWebBundlr = async () => {
   const result = await fetch("/api/getPresignedHash", { method: "GET" });
   const data = await result.json();
@@ -37,8 +42,8 @@ export const getWebBundlr = async () => {
 
 // Default app tags for all type of uploads
 const defaultTags: Tag[] = [
-  { name: "App-Name", value: "la3-unlock" },
-  { name: "App-version", value: "alpha-0.1" },
+  { name: "App-Name", value: "PL_Tijori" },
+  { name: "App-Version", value: "20230214" },
 ];
 
 // Function to upload encrypted data
@@ -53,13 +58,21 @@ export const uploadData = async (
     { name: "Description", value: metadata.description },
     { name: "ContractAddress", value: metadata.contractAddress },
     { name: "Chain", value: metadata.chain },
-    { name: "TokenId", value: metadata.tokenId },
     { name: "FileSize", value: `${metadata.fileSize}` },
     { name: "FileMime", value: metadata.fileMime },
     { name: "EncryptedKey", value: metadata.encryptedKey },
     { name: "AccessString", value: metadata.accessString },
     { name: "CreatedAt", value: `${metadata.createdAt}` },
   ]);
+
+  if (metadata.tokenId) {
+    tags = tags.concat([
+      { name: "TokenId", value: metadata.tokenId },
+      { name: "Lock-Type", value: LockType.TOKEN },
+    ]);
+  } else {
+    tags = tags.concat([{ name: "Lock-Type", value: LockType.CONTRACT }]);
+  }
 
   console.log(tags);
 

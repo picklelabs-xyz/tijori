@@ -1,6 +1,6 @@
 import { DocumentNode } from "graphql";
 import { GraphQLClient } from "graphql-request";
-import { ARWEAVE_GRAPH_ENDPOINT } from "../../constants";
+import { ARWEAVE_GRAPHQL_ENDPOINT } from "../../constants";
 
 export const fetchGraphQuery = async ({
   query,
@@ -9,7 +9,7 @@ export const fetchGraphQuery = async ({
   query: DocumentNode | string;
   variables: Record<string, unknown>;
 }) => {
-  const client = new GraphQLClient(ARWEAVE_GRAPH_ENDPOINT);
+  const client = new GraphQLClient(ARWEAVE_GRAPHQL_ENDPOINT);
   const data = await client.request(query, variables);
   return data;
 };

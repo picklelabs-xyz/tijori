@@ -9,6 +9,14 @@ const NavBar = () => {
         <h1 className="text-xl font-bold">
           <Link href="/">TIJORI</Link>
         </h1>
+        <div className="flex gap-12 text-sm font-semibold tracking-widest">
+          <Link href="/collections">
+            <div>COLLECTIONS</div>
+          </Link>
+          <Link href="/">
+            <div>NFT</div>
+          </Link>
+        </div>
         <div className="flex text-sm items-center">
           <NetworkSelector />
           <WalletConnector />

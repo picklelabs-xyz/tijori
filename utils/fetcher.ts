@@ -1,10 +1,22 @@
+import { Collection } from "./../types/Collection";
 import { NFTList } from "./../types/NFT";
 import axios from "axios";
 import { Fetcher } from "swr";
 import NFT from "../types/NFT";
 import { ethers } from "ethers";
 
-export const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+export const fetcher = (url: string, token: string) =>
+  axios.get(url, { headers: { Authorization: token } }).then((res) => res.data);
+
+export const axiosFetcher = (
+  url: string,
+  method = "get",
+  token: string,
+  payload?: string
+) =>
+  axios({ method, url, headers: { Authorization: token }, data: payload }).then(
+    (res) => res.data
+  );
 
 export const fetchNfts: Fetcher<NFTList> = async (url: string) => {
   const response = await axios.get(url);
@@ -30,7 +42,7 @@ const mapApiResponse = (item: any): NFT => {
     description: item.metadata.description,
     image: item.media[0].gateway,
     tokenId: ethers.BigNumber.from(item.id.tokenId).toString(),
-    tokenType: item.contractMetadata.tokenType,
+    tokenStandard: item.contractMetadata.tokenType,
     collectionName: item.contractMetadata.name,
     contractAddress: item.contract.address,
     contractSymbol: item.contractMetadata.symbol,

@@ -11,7 +11,11 @@ const Footer = () => {
           <span>FAQ</span>
         </div>
         <div className="grid gap-4 grid-cols-3">
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://twitter.com/pickle_labs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <TwitterIcon className="w-5 h-5 fill-slate-500 hover:fill-slate-700" />
           </a>
           <a href="#" target="_blank" rel="noopener noreferrer">

@@ -4,19 +4,16 @@ import ReactMarkdown from "react-markdown";
 import useSWR from "swr";
 import { useNetwork } from "wagmi";
 import { fetchNftMetdata } from "../../utils/fetcher";
-import Vault from "../../components/VaultGrid/Vault";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import Modal from "../../components/Lock/Modal";
 import useIsMounted from "../../hooks/useIsMounted";
 import Link from "next/link";
 import ConnectWallet from "../../components/ConnectWallet";
 import Page from "../../components/Layout/Page";
 import Loader from "../../components/Elements/Loader";
+import VaultWrapper from "../../components/VaultWrapper";
 
 const NftDetail = () => {
   const isMounted = useIsMounted();
   const [shouldFetch, setShouldFetch] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const { chain } = useNetwork();
   const router = useRouter();
   const { nft } = router.query;
@@ -73,7 +70,7 @@ const NftDetail = () => {
                 </div>
                 <div className="mt-2 flex justify-between">
                   <span className="font-semibold">Type</span>
-                  <span>{data.tokenType}</span>
+                  <span>{data.tokenStandard}</span>
                 </div>
                 <div className="mt-2 flex justify-between">
                   <span className="font-semibold">Address</span>
@@ -94,23 +91,7 @@ const NftDetail = () => {
                 <ReactMarkdown>{data.description}</ReactMarkdown>
               </div>
 
-              <div className="flex justify-between mt-6 items-end">
-                <div className="font-bold text-xl">NFT Vault</div>
-                <button
-                  className="btn btn-blue text-sm flex items-center"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <PlusIcon className="w-4 h-4 mr-2 inline-block" />
-                  <span>Add Item</span>
-                </button>
-              </div>
-              <Vault nft={data} chain={chain.name} />
-              <Modal
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                nft={data}
-                chain={chain.name}
-              />
+              <VaultWrapper {...data} chain={chain.name} />
             </div>
           </div>
         </div>

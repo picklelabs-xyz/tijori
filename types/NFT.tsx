@@ -3,7 +3,7 @@ export default interface NFT {
   description: string;
   image: string;
   tokenId: string;
-  tokenType: "ERC721" | "ERC1155";
+  tokenStandard: "ERC721" | "ERC1155";
   collectionName: string;
   contractAddress: string;
   contractSymbol: string;

@@ -2,41 +2,58 @@ import * as LitJsSdk from "lit-js-sdk";
 
 const client = new LitJsSdk.LitNodeClient();
 
-// access rules with owner of nft
 export const generateAccessControlConditions = (
   contractAddress: string,
   contractType: "ERC721" | "ERC1155",
   chain: string,
-  tokenId: string
+  tokenId?: string
 ) => {
-  if (contractType == "ERC721") {
-    return [
-      {
-        contractAddress,
-        standardContractType: contractType,
-        chain,
-        method: "ownerOf",
-        parameters: [tokenId],
-        returnValueTest: {
-          comparator: "=",
-          value: ":userAddress",
-        },
-      },
-    ];
-  } else {
+  if (!tokenId) {
+    // access rules with any token of the contract
     return [
       {
         contractAddress,
         standardContractType: contractType,
         chain,
         method: "balanceOf",
-        parameters: [":userAddress", tokenId],
+        parameters: [":userAddress"],
         returnValueTest: {
-          comparator: ">",
-          value: "0",
+          comparator: ">=",
+          value: "1",
         },
       },
     ];
+  } else {
+    // access rules with owner of nft
+    if (contractType == "ERC721") {
+      return [
+        {
+          contractAddress,
+          standardContractType: contractType,
+          chain,
+          method: "ownerOf",
+          parameters: [tokenId],
+          returnValueTest: {
+            comparator: "=",
+            value: ":userAddress",
+          },
+        },
+      ];
+    } else {
+      return [
+        {
+          contractAddress,
+          standardContractType: contractType,
+          chain,
+          method: "balanceOf",
+          parameters: [":userAddress", tokenId],
+          returnValueTest: {
+            comparator: ">",
+            value: "0",
+          },
+        },
+      ];
+    }
   }
 };
 
@@ -68,8 +85,7 @@ class Lit {
       chain,
     });
 
-    console.log("Access Control");
-    console.log(accessControlConditions);
+    // console.log(accessControlConditions);
 
     return {
       encryptedFile: encryptedString,

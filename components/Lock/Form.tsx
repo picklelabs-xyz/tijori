@@ -7,12 +7,11 @@ import Metadata from "../../types/Metadata";
 import Button from "../Elements/Button";
 import Input from "../Elements/Input";
 
-interface FormProps {
-  //Check how can we inforce lowercase strings via typescript
+export interface FormProps {
   chain: string;
   contractAddress: string;
-  tokenId: string;
-  tokenType: "ERC721" | "ERC1155";
+  tokenId?: string;
+  tokenStandard: "ERC721" | "ERC1155";
 }
 
 type InputFields = {
@@ -27,7 +26,12 @@ const initialState: InputFields = {
   file: null,
 };
 
-const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
+const Form = ({
+  chain,
+  contractAddress,
+  tokenId,
+  tokenStandard,
+}: FormProps) => {
   const [fileData, setFileData] = useState<string | null>(null);
   const [bundlr, setBundlr] = useState<WebBundlr | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -55,9 +59,9 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
     setUploading(true);
 
     if (file && fileData && bundlr) {
-      const acessControlConditions = generateAccessControlConditions(
+      const accessControlConditions = generateAccessControlConditions(
         contractAddress,
-        tokenType,
+        tokenStandard,
         chain,
         tokenId
       );
@@ -65,7 +69,7 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
       const { encryptedFile, encryptedSymmetricKey } = await lit.enryptString(
         fileData,
         chain,
-        acessControlConditions
+        accessControlConditions
       );
 
       const encryptedData = Buffer.from(
@@ -80,10 +84,10 @@ const Form = ({ chain, contractAddress, tokenId, tokenType }: FormProps) => {
           fileSize: file.size,
           contractAddress,
           tokenId,
-          tokenType,
+          tokenStandard,
           chain,
           encryptedKey: encryptedSymmetricKey,
-          accessString: JSON.stringify(acessControlConditions),
+          accessString: JSON.stringify(accessControlConditions),
           createdAt: Date.now(),
         };
         const result = await uploadData(bundlr, encryptedData, metadata);
