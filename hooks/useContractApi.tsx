@@ -3,10 +3,11 @@ import useSWR from "swr";
 import { useAccount, useNetwork } from "wagmi";
 import { fetcher } from "../utils/fetcher";
 
-const useApi = (url: string) => {
+const useContractApi = (contractAddress: string) => {
   const [shouldFetch, setShouldFetch] = useState(false);
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
+  const url = `https://api.nftport.xyz/v0/nfts/${contractAddress}`;
   const path = `${url}?chain=${chain?.name.toLowerCase()}`;
 
   const { data, error } = useSWR(
@@ -23,4 +24,4 @@ const useApi = (url: string) => {
   return { data, error };
 };
 
-export default useApi;
+export default useContractApi;

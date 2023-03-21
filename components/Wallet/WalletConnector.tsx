@@ -1,10 +1,20 @@
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useState } from "react";
+import { useAccount, useConnect } from "wagmi";
 import useIsMounted from "../../hooks/useIsMounted";
+import useSiwe from "../../hooks/useSiwe";
 import Account from "./Account";
 
+const signIn = async (address: string, chainId: number) => {};
+
 const WalletConnector = () => {
+  const { login } = useSiwe();
+
   const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
+    useConnect({
+      onSuccess(data) {
+        login({ address: data.account, chainId: data.chain.id });
+      },
+    });
   const { isConnected } = useAccount();
   const isMounted = useIsMounted();
 
