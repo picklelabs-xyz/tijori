@@ -3,14 +3,13 @@ import { useRouter } from "next/router";
 import { useNetwork } from "wagmi";
 import Page from "../../components/Layout/Page";
 import VaultWrapper from "../../components/VaultWrapper";
-import useApi from "../../hooks/useApi";
+import useContractApi from "../../hooks/useContractApi";
 
 const CollectionDetail = () => {
   const router = useRouter();
   const { chain } = useNetwork();
   const { id: contractAddress } = router.query;
-  const url = `https://api.nftport.xyz/v0/nfts/${contractAddress}`;
-  const { data, error } = useApi(url);
+  const { data, error } = useContractApi(contractAddress as string);
 
   return (
     <Page>
@@ -74,3 +73,6 @@ const CollectionDetail = () => {
 };
 
 export default CollectionDetail;
+function useEffect(arg0: () => void, arg1: boolean[]) {
+  throw new Error("Function not implemented.");
+}

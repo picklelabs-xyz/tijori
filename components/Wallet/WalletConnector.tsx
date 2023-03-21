@@ -1,25 +1,18 @@
 import { useState } from "react";
 import { useAccount, useConnect } from "wagmi";
 import useIsMounted from "../../hooks/useIsMounted";
-import useSignIn from "../../hooks/useSignIn";
+import useSiwe from "../../hooks/useSiwe";
 import Account from "./Account";
 
 const signIn = async (address: string, chainId: number) => {};
 
 const WalletConnector = () => {
-  // const { setTrigger } = useSignIn({
-  //   address: "0xAD000BD0abFf98408578F3Ee3f3E3dF0751D0642",
-  //   chainId: 121,
-  // });
-
-  const [loginTrigger, setLoginTrigger] = useState(false);
-  const { setTrigger } = useSignIn();
+  const { login } = useSiwe();
 
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect({
       onSuccess(data) {
-        //trigger login
-        setTrigger(true);
+        login({ address: data.account, chainId: data.chain.id });
       },
     });
   const { isConnected } = useAccount();

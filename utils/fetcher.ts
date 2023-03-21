@@ -8,6 +8,16 @@ import { ethers } from "ethers";
 export const fetcher = (url: string, token: string) =>
   axios.get(url, { headers: { Authorization: token } }).then((res) => res.data);
 
+export const axiosFetcher = (
+  url: string,
+  method = "get",
+  token: string,
+  payload?: string
+) =>
+  axios({ method, url, headers: { Authorization: token }, data: payload }).then(
+    (res) => res.data
+  );
+
 export const fetchNfts: Fetcher<NFTList> = async (url: string) => {
   const response = await axios.get(url);
   // console.log(response.data);
