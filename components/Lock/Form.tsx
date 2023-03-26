@@ -116,9 +116,15 @@ const Form = ({
 
   return (
     <div className="">
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+      <form
+        noValidate
+        id="upload-form"
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 gap-6"
+      >
         <div>
           <Input
+            required
             name="file"
             type="file"
             onChange={handleInputChange}
@@ -128,6 +134,7 @@ const Form = ({
         </div>
         <div>
           <Input
+            required
             name="name"
             type="text"
             value={name}
